@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.rf17.soundify.library.Soundify;
+import com.rf17.soundify.library.utils.DebugUtils;
 
 import java.math.BigInteger;
 

@@ -1,26 +1,39 @@
 package com.rf17.soundify.app;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.rf17.soundify.library.Soundify;
 import com.rf17.soundifyapp.R;
 
-import org.firezenk.audiowaves.Visualizer;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FloatingActionButton fab;
+    private EditText messageSend;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    private ArrayList<Message> messages = new ArrayList<>();
+
+    private Soundify soundify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,29 +44,81 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            ((Visualizer) findViewById(R.id.visualizer)).startListening(); //to stop: .stopListening() FIXME
+            fab = (FloatingActionButton) findViewById(R.id.fab);
 
-            final Soundify soundify = new Soundify(this);
+            soundify = new Soundify(this);
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
                 public void OnReceiveData(byte[] bytes) {
-                    // TODO Show in List View
-                    Log.v("###DEBUG###", "Mensagem: "+Soundify.bytesToString(bytes));
+                    Message message = new Message("RF", Soundify.bytesToString(bytes));
+                    messages.add(message);
+                    getDataSet();
                 }
             });
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soundify.send(Soundify.stringToBytes("a"));
+                    showDialog();
                 }
             });
 
-        }catch (Exception e){
+            mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapter(getDataSet());
+            mRecyclerView.setAdapter(mAdapter);
+
+            // Code to Add an item with default animation
+            //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);
+
+            // Code to remove an item with default animation
+            //((MyRecyclerViewAdapter) mAdapter).deleteItem(index);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(viewGroup, "Error: "+e.getMessage(), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(viewGroup, "Error: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     *
+     */
+    public void showDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .title(R.string.message)
+                .customView(R.layout.dialog_send_customview, true)
+                .positiveText(R.string.send)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
+                    }
+                })
+                .build();
+
+        if(dialog.getCustomView() != null) {
+            messageSend = (EditText) dialog.getCustomView().findViewById(R.id.etx_send);
+        }
+
+        dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter
+                .MyClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.i("RecyclerView", " Clicked on Item " + position);
+            }
+        });
+    }
+
+    private ArrayList<Message> getDataSet() {
+        return messages;
     }
 
     @Override

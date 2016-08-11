@@ -20,6 +20,7 @@
 
             <TextView
                 android:id="@+id/textView"
+                android:text="@string/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -27,10 +28,12 @@
 
             <TextView
                 android:id="@+id/textView2"
+                android:text="@string/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/textView"/>
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="12sp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

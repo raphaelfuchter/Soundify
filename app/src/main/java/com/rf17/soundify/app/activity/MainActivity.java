@@ -1,5 +1,6 @@
-package com.rf17.soundify.app;
+package com.rf17.soundify.app.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -8,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +17,15 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
+import com.rf17.soundify.app.model.Message;
 import com.rf17.soundify.library.Soundify;
 import com.rf17.soundifyapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private ArrayList<Message> messages = new ArrayList<>();
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 
     private Soundify soundify;
 
@@ -45,14 +51,19 @@ public class MainActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
 
             fab = (FloatingActionButton) findViewById(R.id.fab);
+            mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter = new MyRecyclerViewAdapter(getDataSet());
+            mRecyclerView.setAdapter(mAdapter);
 
             soundify = new Soundify(this);
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
                 public void OnReceiveData(byte[] bytes) {
-                    Message message = new Message("RF", Soundify.bytesToString(bytes));
-                    messages.add(message);
-                    getDataSet();
+                    Message message = new Message(Soundify.bytesToString(bytes), sdf.format(new Date()));
+                    ((MyRecyclerViewAdapter) mAdapter).addItem(message, messages.size());
                 }
             });
 
@@ -62,19 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     showDialog();
                 }
             });
-
-            mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-            mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new MyRecyclerViewAdapter(getDataSet());
-            mRecyclerView.setAdapter(mAdapter);
-
-            // Code to Add an item with default animation
-            //((MyRecyclerViewAdapter) mAdapter).addItem(obj, index);
-
-            // Code to remove an item with default animation
-            //((MyRecyclerViewAdapter) mAdapter).deleteItem(index);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,22 +95,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .build();
-
         if(dialog.getCustomView() != null) {
             messageSend = (EditText) dialog.getCustomView().findViewById(R.id.etx_send);
         }
-
         dialog.show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter
-                .MyClickListener() {
+        ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                Log.i("RecyclerView", " Clicked on Item " + position);
+                ((MyRecyclerViewAdapter) mAdapter).deleteItem(position);
+
             }
         });
     }
@@ -123,23 +119,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent it = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(it);
+        }else if (id == R.id.action_about) {
+            Intent it = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(it);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

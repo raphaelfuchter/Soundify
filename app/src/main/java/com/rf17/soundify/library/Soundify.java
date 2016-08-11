@@ -5,7 +5,6 @@ import android.app.Activity;
 import com.rf17.soundify.library.utils.BytesUtils;
 import com.rf17.soundify.library.receive.ReceiveThread;
 import com.rf17.soundify.library.send.SendThread;
-import com.rf17.soundify.library.utils.DebugUtils;
 
 public class Soundify extends BytesUtils {
 

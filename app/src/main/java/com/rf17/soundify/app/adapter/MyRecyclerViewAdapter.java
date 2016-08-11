@@ -1,4 +1,4 @@
-package com.rf17.soundify.app;
+package com.rf17.soundify.app.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.rf17.soundify.app.model.Message;
 import com.rf17.soundifyapp.R;
 
 import java.util.ArrayList;

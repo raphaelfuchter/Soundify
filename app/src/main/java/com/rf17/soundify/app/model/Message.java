@@ -1,4 +1,4 @@
-package com.rf17.soundify.app;
+package com.rf17.soundify.app.model;
 
 public class Message {
     private String mText1;

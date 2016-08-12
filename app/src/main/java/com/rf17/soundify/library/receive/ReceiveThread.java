@@ -69,12 +69,19 @@ public class ReceiveThread {
     }
 
     private void decodeFinishValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.FINISH_HZ-100 && frequencyInHz.intValue() < Soundify.FINISH_HZ+100) {
+        if ((frequencyInHz.intValue() > Soundify.FINISH_HZ-50) && (frequencyInHz.intValue() < Soundify.FINISH_HZ+50)) {
             thread.interrupt();
             if(thread.isInterrupted()){
                 Log.v("##TESTE##", "returnValue: "+returnValue);//TODO REMOVE THIS!
-                byte[] bval = new BigInteger(returnValue, 2).toByteArray();
-                Soundify.soundifyListener.OnReceiveData(bval);
+
+                if(returnValue == null){
+                    Soundify.soundifyListener.OnReceiveError(1, "Null value in return value!");
+                }else if(returnValue.isEmpty()){
+                    Soundify.soundifyListener.OnReceiveError(2, "Empty value in return value!");
+                }else {
+                    byte[] bval = new BigInteger(returnValue, 2).toByteArray();
+                    Soundify.soundifyListener.OnReceiveData(bval);
+                }
             }
         }
     }

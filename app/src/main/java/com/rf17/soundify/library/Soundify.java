@@ -26,7 +26,7 @@ public class Soundify extends BytesUtils {
     /**
      * The frequency, in HZ, of finish value of transmission and receive a data
      */
-    public final static int FINISH_HZ = 4500;
+    public final static int FINISH_HZ = 3500;
 
     /**
      * //TODO Colocar comentario
@@ -83,7 +83,7 @@ public class Soundify extends BytesUtils {
          * @param msg  Error message.
          * @since 0.1
          */
-        //void OnReceiveError(int code, String msg); TODO
+        void OnReceiveError(int code, String msg);
     }
 
     /**

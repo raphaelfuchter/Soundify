@@ -1,7 +1,6 @@
 package com.rf17.soundify.app.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 public class MyRecyclerViewAdapter extends RecyclerView
         .Adapter<MyRecyclerViewAdapter
         .DataObjectHolder> {
-    private static String LOG_TAG = "MyRecyclerViewAdapter";
     private ArrayList<Message> mDataset;
     private static MyClickListener myClickListener;
 
@@ -29,7 +27,6 @@ public class MyRecyclerViewAdapter extends RecyclerView
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.textView);
             dateTime = (TextView) itemView.findViewById(R.id.textView2);
-            Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
         }
 
@@ -79,6 +76,6 @@ public class MyRecyclerViewAdapter extends RecyclerView
     }
 
     public interface MyClickListener {
-        public void onItemClick(int position, View v);
+        void onItemClick(int position, View v);
     }
 }

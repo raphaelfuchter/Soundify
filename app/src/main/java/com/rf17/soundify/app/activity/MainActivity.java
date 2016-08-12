@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
@@ -65,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
                     Message message = new Message(Soundify.bytesToString(bytes), sdf.format(new Date()));
                     ((MyRecyclerViewAdapter) mAdapter).addItem(message, messages.size());
                 }
+
+                @Override
+                public void OnReceiveError(int code, String msg) {
+                    Toast.makeText(MainActivity.this, "Error! Code: " + code + " Exception: " + msg, Toast.LENGTH_SHORT).show();
+                }
             });
 
             fab.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(viewGroup, "Error: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

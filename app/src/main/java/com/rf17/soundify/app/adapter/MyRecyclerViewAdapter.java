@@ -11,15 +11,11 @@ import com.rf17.soundifyapp.R;
 
 import java.util.ArrayList;
 
-public class MyRecyclerViewAdapter extends RecyclerView
-        .Adapter<MyRecyclerViewAdapter
-        .DataObjectHolder> {
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.DataObjectHolder> {
     private ArrayList<Message> mDataset;
     private static MyClickListener myClickListener;
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder
-            implements View
-            .OnClickListener {
+    public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView label;
         TextView dateTime;
 
@@ -36,8 +32,8 @@ public class MyRecyclerViewAdapter extends RecyclerView
         }
     }
 
-    public void setOnItemClickListener(MyClickListener myClickListener) {
-        this.myClickListener = myClickListener;
+    public void setOnItemClickListener(MyClickListener clickListener) {
+        myClickListener = clickListener;
     }
 
     public MyRecyclerViewAdapter(ArrayList<Message> myDataset) {
@@ -45,13 +41,9 @@ public class MyRecyclerViewAdapter extends RecyclerView
     }
 
     @Override
-    public DataObjectHolder onCreateViewHolder(ViewGroup parent,
-                                               int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_row, parent, false);
-
-        DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
-        return dataObjectHolder;
+    public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_row, parent, false);
+        return new DataObjectHolder(view);
     }
 
     @Override

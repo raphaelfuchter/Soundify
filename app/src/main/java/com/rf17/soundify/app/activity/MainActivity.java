@@ -1,6 +1,5 @@
 package com.rf17.soundify.app.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -9,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,12 +25,9 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton fab;
     private EditText messageSend;
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private ArrayList<Message> messages = new ArrayList<>();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
@@ -48,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-            fab = (FloatingActionButton) findViewById(R.id.fab);
-            mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
             mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(this);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new MyRecyclerViewAdapter(getDataSet());
             mRecyclerView.setAdapter(mAdapter);
@@ -120,22 +114,4 @@ public class MainActivity extends AppCompatActivity {
         return messages;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent it = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(it);
-        }else if (id == R.id.action_about) {
-            Intent it = new Intent(MainActivity.this, AboutActivity.class);
-            startActivity(it);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

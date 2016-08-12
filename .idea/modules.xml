@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Soundify.iml" filepath="$PROJECT_DIR$/Soundify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SoundifyApp.iml" filepath="$PROJECT_DIR$/SoundifyApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

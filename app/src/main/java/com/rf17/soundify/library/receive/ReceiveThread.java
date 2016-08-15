@@ -70,6 +70,9 @@ public class ReceiveThread {
 
     private void decodeFinishValue(Float frequencyInHz) {
         if ((frequencyInHz.intValue() > Soundify.FINISH_HZ-50) && (frequencyInHz.intValue() < Soundify.FINISH_HZ+50)) {
+
+            DebugUtils.log("finish");
+
             thread.interrupt();
             if(thread.isInterrupted()){
                 Log.v("##TESTE##", "returnValue: "+returnValue);//TODO REMOVE THIS!

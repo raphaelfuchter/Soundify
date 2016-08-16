@@ -29,25 +29,53 @@ public class Soundify extends BytesUtils {
     public final static int FINISH_HZ = 3500;
 
     /**
-     * //TODO Colocar comentario
+     *
      */
     public static final int SAMPLE_RATE = 22050;
 
     /**
-     * The size of the buffer defines how muche samples are processed in one step. Common values are 1024,2048.
+     * The size of the buffer defines how much samples are processed in one step. Common values are 1024,2048.
      */
     public static final int BUFFER_SIZE = 1024;
 
-    private Activity activity;
+    /**
+     *
+     */
+    public static SoundifyListener soundifyListener;
+
+    /**
+     *
+     */
+    private ReceiveThread receiveThread;
+
+    /**
+     *
+     */
+    private SendThread sendThread;
 
     /**
      * This function is used to initialize the Soundify instance,
-     * if you want to define the method of transmission use the other function.
-     *
      * @param activity Current Activity of your app.
      */
     public Soundify(Activity activity) {
-        this.activity = activity;
+        receiveThread = new ReceiveThread(activity);
+        sendThread = new SendThread();
+    }
+
+    /**
+     * This function makes the library starts to listen.
+     * @since 0.1
+     * */
+    public void startListening(){
+        receiveThread.startThread();
+    }
+
+    /**
+     * This function makes the library stop to listen.
+     * @since 0.1
+     * */
+    public void stopListening(){
+        receiveThread.stopThread();
     }
 
     /**
@@ -57,13 +85,11 @@ public class Soundify extends BytesUtils {
      * @since 0.1
      */
     public void send(byte bytes[]) {
-        new SendThread(bytes).start();
+        sendThread.startThread(bytes);
     }
 
     /**
      * This implementation is required to treat the actions of the Soundify
-     *
-     * @author Raphael
      * @since 0.1
      */
     public interface SoundifyListener {
@@ -87,16 +113,13 @@ public class Soundify extends BytesUtils {
     }
 
     /**
-     * This function is used to set your listener of Soundify' events.
+     * This function is used to set your listener of Soundify events.
      *
      * @param listener SoundifyListener instance.
      * @since 0.1
      */
     public void setSoundifyListener(SoundifyListener listener) {
         soundifyListener = listener;
-        new ReceiveThread(activity);
     }
-
-    public static SoundifyListener soundifyListener;//TODO FIND A BETTER WAY
 
 }

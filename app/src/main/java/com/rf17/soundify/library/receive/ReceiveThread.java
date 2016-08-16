@@ -18,17 +18,16 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class ReceiveThread {
 
-    public Thread thread;
-    public String returnValue;
+    private Thread thread;
+    private String returnValue;
     private Activity activity;
 
     public ReceiveThread(Activity activity) {
         this.activity = activity;
-        startThread();
+        initThread();
     }
 
-    private void startThread(){
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, Soundify.BUFFER_SIZE/2);
+    private void initThread() {
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
             public void handlePitch(PitchDetectionResult result, AudioEvent e) {
@@ -44,44 +43,58 @@ public class ReceiveThread {
                 });
             }
         };
-        AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, pdh);
-        dispatcher.addAudioProcessor(p);
+        AudioProcessor audioProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, pdh);
+
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, Soundify.BUFFER_SIZE / 2);
+        dispatcher.addAudioProcessor(audioProcessor);
         thread = new Thread(dispatcher, "SoundifyListener");
+    }
+
+    public void startThread() {
         thread.start();
     }
 
+    public void stopThread() {
+        thread.interrupt();
+    }
+
     private void decodeInitValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.INIT_HZ-100 && frequencyInHz.intValue() < Soundify.INIT_HZ+100) {
+        if (frequencyInHz.intValue() > Soundify.INIT_HZ - 100 &&
+                frequencyInHz.intValue() < Soundify.INIT_HZ + 100) {
+
             returnValue = "";
         }
     }
 
     private void decodeZeroValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.ZERO_HZ-100 && frequencyInHz.intValue() < Soundify.ZERO_HZ+100) {
+        if (frequencyInHz.intValue() > Soundify.ZERO_HZ - 100 &&
+                frequencyInHz.intValue() < Soundify.ZERO_HZ + 100) {
+
             returnValue = returnValue.concat("0");
         }
     }
 
     private void decodeOneValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.ONE_HZ-100 && frequencyInHz.intValue() < Soundify.ONE_HZ+100) {
+        if (frequencyInHz.intValue() > Soundify.ONE_HZ - 100 &&
+                frequencyInHz.intValue() < Soundify.ONE_HZ + 100) {
+
             returnValue = returnValue.concat("1");
         }
     }
 
     private void decodeFinishValue(Float frequencyInHz) {
-        if ((frequencyInHz.intValue() > Soundify.FINISH_HZ-50) && (frequencyInHz.intValue() < Soundify.FINISH_HZ+50)) {
+        if ((frequencyInHz.intValue() > Soundify.FINISH_HZ - 100) &&
+                (frequencyInHz.intValue() < Soundify.FINISH_HZ + 100)) {
 
             DebugUtils.log("finish");
-
             thread.interrupt();
-            if(thread.isInterrupted()){
-                Log.v("##TESTE##", "returnValue: "+returnValue);//TODO REMOVE THIS!
-
-                if(returnValue == null){
+            if (thread.isInterrupted()) {
+                Log.v("##TESTE##", "returnValue: '" + returnValue + "' ");//TODO REMOVE THIS!
+                if (returnValue == null) {
                     Soundify.soundifyListener.OnReceiveError(1, "Null value in return value!");
-                }else if(returnValue.isEmpty()){
+                } else if (returnValue.isEmpty()) {
                     Soundify.soundifyListener.OnReceiveError(2, "Empty value in return value!");
-                }else {
+                } else {
                     byte[] bval = new BigInteger(returnValue, 2).toByteArray();
                     Soundify.soundifyListener.OnReceiveData(bval);
                 }

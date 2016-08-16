@@ -5,24 +5,18 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 
 import com.rf17.soundify.library.Soundify;
+import com.rf17.soundify.library.utils.BytesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SendThread extends Thread {
 
-    private final String bytes;
+    private String bytes;
 
-    public SendThread(byte[] bytes) {
-        this.bytes =  bytesArrayToString(bytes);
-    }
-
-    private static String bytesArrayToString(byte[] bytes){
-        String bytesString = "";
-        for (byte b : bytes) {
-            bytesString += Integer.toBinaryString(b & 255 | 256).substring(1);
-        }
-        return bytesString;
+    public void startThread(byte[] bytes) {
+        this.bytes = BytesUtils.bytesArrayToString(bytes);
+        this.start();
     }
 
     @Override
@@ -36,12 +30,10 @@ public class SendThread extends Thread {
                 AudioTrack.MODE_STREAM
         );
         track.play();
-
         List<Integer> frequencies = encodeBytes(bytes);
-
         for (int freq : frequencies) {
             short[] samples = generateSamples(freq);
-            track.write(samples, 0, 620);//FIXME
+            track.write(samples, 0, 620);//FIXME TODO
         }
     }
 
@@ -67,7 +59,6 @@ public class SendThread extends Thread {
             }
         }
         frequencies.add(Soundify.FINISH_HZ);
-
         return frequencies;
     }
 

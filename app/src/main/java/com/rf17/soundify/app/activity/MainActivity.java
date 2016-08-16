@@ -44,13 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new MyRecyclerViewAdapter(getDataSet());
+            mAdapter = new MyRecyclerViewAdapter(messages);
             mRecyclerView.setAdapter(mAdapter);
 
             soundify = new Soundify(this);
+            soundify.startListening();
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
                 public void OnReceiveData(byte[] bytes) {
@@ -101,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(soundify != null) {
+            soundify.startListening();
+        }
         ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
@@ -110,8 +115,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<Message> getDataSet() {
-        return messages;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        soundify.stopListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        soundify.stopListening();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundify.stopListening();
     }
 
 }

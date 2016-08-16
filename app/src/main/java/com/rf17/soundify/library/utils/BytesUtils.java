@@ -84,4 +84,12 @@ public class BytesUtils {
         return ByteBuffer.wrap(bytes).getChar(index);
     }
 
+    public static String bytesArrayToString(byte[] bytes){
+        String bytesString = "";
+        for (byte b : bytes) {
+            bytesString += Integer.toBinaryString(b & 255 | 256).substring(1);
+        }
+        return bytesString;
+    }
+
 }

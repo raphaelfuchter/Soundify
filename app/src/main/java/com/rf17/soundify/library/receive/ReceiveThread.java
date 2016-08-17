@@ -1,7 +1,6 @@
 package com.rf17.soundify.library.receive;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.rf17.soundify.library.Soundify;
 import com.rf17.soundify.library.utils.DebugUtils;
@@ -35,10 +34,7 @@ public class ReceiveThread {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        decodeInitValue(pitchInHz);
-                        decodeZeroValue(pitchInHz);
-                        decodeOneValue(pitchInHz);
-                        decodeFinishValue(pitchInHz);
+                        translate(pitchInHz);
                     }
                 });
             }
@@ -51,45 +47,52 @@ public class ReceiveThread {
     }
 
     public void startThread() {
-        thread.start();
+        if(!thread.isAlive()){
+            thread.start();
+        }
     }
 
     public void stopThread() {
-        thread.interrupt();
+        if(thread.isAlive()) {
+            thread.interrupt();
+        }
+    }
+
+    private void translate(Float pitchInHz){
+        decodeInitValue(pitchInHz);
+        decodeZeroValue(pitchInHz);
+        decodeOneValue(pitchInHz);
+        decodeFinishValue(pitchInHz);
+    }
+
+    private boolean isCorrectedFrequency(int frequency, int hz){
+        return frequency > hz - Soundify.HZ_TX_ERROR &&
+                frequency < hz + Soundify.HZ_TX_ERROR;
     }
 
     private void decodeInitValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.INIT_HZ - 100 &&
-                frequencyInHz.intValue() < Soundify.INIT_HZ + 100) {
-
+        if(isCorrectedFrequency(frequencyInHz.intValue(), Soundify.HZ_BEGIN)){
             returnValue = "";
         }
     }
 
     private void decodeZeroValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.ZERO_HZ - 100 &&
-                frequencyInHz.intValue() < Soundify.ZERO_HZ + 100) {
-
+        if(isCorrectedFrequency(frequencyInHz.intValue(), Soundify.HZ_ZERO)){
             returnValue = returnValue.concat("0");
         }
     }
 
     private void decodeOneValue(Float frequencyInHz) {
-        if (frequencyInHz.intValue() > Soundify.ONE_HZ - 100 &&
-                frequencyInHz.intValue() < Soundify.ONE_HZ + 100) {
-
+        if(isCorrectedFrequency(frequencyInHz.intValue(), Soundify.HZ_ONE)){
             returnValue = returnValue.concat("1");
         }
     }
 
     private void decodeFinishValue(Float frequencyInHz) {
-        if ((frequencyInHz.intValue() > Soundify.FINISH_HZ - 100) &&
-                (frequencyInHz.intValue() < Soundify.FINISH_HZ + 100)) {
-
-            DebugUtils.log("finish");
+        if(isCorrectedFrequency(frequencyInHz.intValue(), Soundify.HZ_END)){
             thread.interrupt();
             if (thread.isInterrupted()) {
-                Log.v("##TESTE##", "returnValue: '" + returnValue + "' ");//TODO REMOVE THIS!
+                DebugUtils.log("value received: '" + returnValue + "' ");
                 if (returnValue == null) {
                     Soundify.soundifyListener.OnReceiveError(1, "Null value in return value!");
                 } else if (returnValue.isEmpty()) {

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void OnReceiveData(byte[] bytes) {
                     Message message = new Message(Soundify.bytesToString(bytes), sdf.format(new Date()));
-                    ((MyRecyclerViewAdapter) mAdapter).addItem(message, messages.size());
+                    ((MyRecyclerViewAdapter) mAdapter).addItem(message, 0);
                 }
 
                 @Override

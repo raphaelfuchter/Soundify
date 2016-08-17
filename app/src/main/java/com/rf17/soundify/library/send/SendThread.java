@@ -6,6 +6,7 @@ import android.media.AudioTrack;
 
 import com.rf17.soundify.library.Soundify;
 import com.rf17.soundify.library.utils.BytesUtils;
+import com.rf17.soundify.library.utils.DebugUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,8 @@ public class SendThread extends Thread {
 
     private String bytes;
 
-    public void startThread(byte[] bytes) {
+    public SendThread(byte[] bytes) {
         this.bytes = BytesUtils.bytesArrayToString(bytes);
-        this.start();
     }
 
     @Override
@@ -33,13 +33,13 @@ public class SendThread extends Thread {
         List<Integer> frequencies = encodeBytes(bytes);
         for (int freq : frequencies) {
             short[] samples = generateSamples(freq);
-            track.write(samples, 0, 620);//FIXME TODO
+            track.write(samples, 0, 620);
         }
     }
 
-    static short[] generateSamples(float frequency) {
+    private static short[] generateSamples(float frequency) {
         final short sample[] = new short[Soundify.BUFFER_SIZE];
-        final double increment = 2 * Math.PI * frequency / Soundify.SAMPLE_RATE;
+        final double increment = 50 * Math.PI * frequency / Soundify.SAMPLE_RATE;
         double angle = 0;
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = (short) (Math.sin(angle) * Short.MAX_VALUE);
@@ -48,17 +48,34 @@ public class SendThread extends Thread {
         return sample;
     }
 
-    static List<Integer> encodeBytes(String bytes) {
+    private static List<Integer> encodeBytes(String stringBytes) {
+
+        DebugUtils.log("value to send: '" + stringBytes + "' ");
+
         List<Integer> frequencies = new ArrayList<>();
-        frequencies.add(Soundify.INIT_HZ);
-        for(int i = 0; i < bytes.length(); i++){
-            if(bytes.substring(i, i+1).equals("0")){
-                frequencies.add(Soundify.ZERO_HZ);
-            }else{
-                frequencies.add(Soundify.ONE_HZ);
+        frequencies.add(Soundify.HZ_BEGIN);
+        String antByte = "";
+        String stringByte;
+        for (int i = 0; i < stringBytes.length(); i++) {
+
+            stringByte = stringBytes.substring(i, i + 1);
+
+            DebugUtils.log("ant: " + antByte);
+            DebugUtils.log("atu: " + stringByte);
+            DebugUtils.log("");
+
+            if (antByte.equals(stringByte)) {
+                frequencies.add(Soundify.HZ_SEPARATOR);
+            } else if (stringByte.equals("0")) {
+                frequencies.add(Soundify.HZ_ZERO);
+                antByte = "0";
+            } else if (stringByte.equals("1")) {
+                frequencies.add(Soundify.HZ_ONE);
+                antByte = "1";
             }
+
         }
-        frequencies.add(Soundify.FINISH_HZ);
+        frequencies.add(Soundify.HZ_END);
         return frequencies;
     }
 

@@ -9,27 +9,37 @@ import com.rf17.soundify.library.send.SendThread;
 public class Soundify extends BytesUtils {
 
     /**
-     * The frequency, in HZ, of initialize value of transmission and receive a data
+     * The frequency, in HZ, used as begin transmission.
      */
-    public final static int INIT_HZ = 2500;
+    public final static int HZ_BEGIN = 1976;
 
     /**
-     * The frequency, in HZ, of zero(0) value of transmission and receive a data
+     * The frequency, in HZ, used as send a binary 0.
      */
-    public final static int ZERO_HZ = 3000;
+    public final static int HZ_ZERO = 1174;
 
     /**
-     * The frequency, in HZ, of one(0) value of transmission and receive a data
+     * The frequency, in HZ, used as send a binary 1.
      */
-    public final static int ONE_HZ = 4000;
+    public final static int HZ_ONE = 784;
 
     /**
-     * The frequency, in HZ, of finish value of transmission and receive a data
+     * The frequency, in HZ, used as a separator between repeated digits
      */
-    public final static int FINISH_HZ = 3500;
+    public final static int HZ_SEPARATOR = 988;
+
+    /**
+     * The frequency, in HZ, used as end transmission.
+     */
+    public final static int HZ_END = 1568;
 
     /**
      *
+     */
+    public final static int HZ_TX_ERROR = 50;
+
+    /**
+     * //TODO Colocar comentario
      */
     public static final int SAMPLE_RATE = 22050;
 
@@ -49,17 +59,11 @@ public class Soundify extends BytesUtils {
     private ReceiveThread receiveThread;
 
     /**
-     *
-     */
-    private SendThread sendThread;
-
-    /**
      * This function is used to initialize the Soundify instance,
      * @param activity Current Activity of your app.
      */
     public Soundify(Activity activity) {
         receiveThread = new ReceiveThread(activity);
-        sendThread = new SendThread();
     }
 
     /**
@@ -85,7 +89,7 @@ public class Soundify extends BytesUtils {
      * @since 0.1
      */
     public void send(byte bytes[]) {
-        sendThread.startThread(bytes);
+        new SendThread(bytes).start();
     }
 
     /**

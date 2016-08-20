@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
             soundify.startListening();
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
-                public void OnReceiveData(byte[] bytes) {
-                    Message message = new Message(Soundify.bytesToString(bytes), sdf.format(new Date()));
+                public void OnReceiveData(String data) {
+                    Message message = new Message(data, sdf.format(new Date()));
                     ((MyRecyclerViewAdapter) mAdapter).addItem(message, 0);
                 }
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
+                        soundify.send("");
                     }
                 })
                 .build();

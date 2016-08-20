@@ -9,36 +9,6 @@ import com.rf17.soundify.library.send.SendThread;
 public class Soundify extends BytesUtils {
 
     /**
-     * The frequency, in HZ, used as begin transmission.
-     */
-    public final static int HZ_BEGIN = 1976;
-
-    /**
-     * The frequency, in HZ, used as send a binary 0.
-     */
-    public final static int HZ_ZERO = 1174;
-
-    /**
-     * The frequency, in HZ, used as send a binary 1.
-     */
-    public final static int HZ_ONE = 784;
-
-    /**
-     * The frequency, in HZ, used as a separator between repeated digits
-     */
-    public final static int HZ_SEPARATOR = 988;
-
-    /**
-     * The frequency, in HZ, used as end transmission.
-     */
-    public final static int HZ_END = 1568;
-
-    /**
-     *
-     */
-    public final static int HZ_TX_ERROR = 50;
-
-    /**
      * //TODO Colocar comentario
      */
     public static final int SAMPLE_RATE = 22050;
@@ -85,11 +55,11 @@ public class Soundify extends BytesUtils {
     /**
      * This function transmit the message.
      *
-     * @param bytes Send's data.
+     * @param message Send's data.
      * @since 0.1
      */
-    public void send(byte bytes[]) {
-        new SendThread(bytes).start();
+    public void send(String message) {
+        new SendThread(message).start();
     }
 
     /**
@@ -101,10 +71,10 @@ public class Soundify extends BytesUtils {
         /**
          * This is called when the Soundify receive a data.
          *
-         * @param bytes data received.
+         * @param data data received.
          * @since 0.1
          */
-        void OnReceiveData(byte[] bytes);
+        void OnReceiveData(String data);
 
         /**
          * This is called when the Soundify receive an error.

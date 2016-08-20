@@ -59,13 +59,13 @@ public class ReceiveThread {
     }
 
     private void translate(Float pitchInHz){
-        decodeInitValue(pitchInHz);
+        /*decodeInitValue(pitchInHz);
         decodeZeroValue(pitchInHz);
         decodeOneValue(pitchInHz);
-        decodeFinishValue(pitchInHz);
+        decodeFinishValue(pitchInHz);*/
     }
 
-    private boolean isCorrectedFrequency(int frequency, int hz){
+    /*private boolean isCorrectedFrequency(int frequency, int hz){
         return frequency > hz - Soundify.HZ_TX_ERROR &&
                 frequency < hz + Soundify.HZ_TX_ERROR;
     }
@@ -103,6 +103,6 @@ public class ReceiveThread {
                 }
             }
         }
-    }
+    }*/
 
 }

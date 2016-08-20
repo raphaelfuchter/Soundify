@@ -4,8 +4,8 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
+import com.rf17.soundify.library.Constants.ConstantsHz;
 import com.rf17.soundify.library.Soundify;
-import com.rf17.soundify.library.utils.BytesUtils;
 import com.rf17.soundify.library.utils.DebugUtils;
 
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ import java.util.List;
 
 public class SendThread extends Thread {
 
-    private String bytes;
+    private String data;
 
-    public SendThread(byte[] bytes) {
-        this.bytes = BytesUtils.bytesArrayToString(bytes);
+    public SendThread(String data) {
+        this.data = data;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class SendThread extends Thread {
                 AudioTrack.MODE_STREAM
         );
         track.play();
-        List<Integer> frequencies = encodeBytes(bytes);
+        List<Integer> frequencies = encodeData(data);
         for (int freq : frequencies) {
             short[] samples = generateSamples(freq);
             track.write(samples, 0, 620);
@@ -48,34 +48,14 @@ public class SendThread extends Thread {
         return sample;
     }
 
-    private static List<Integer> encodeBytes(String stringBytes) {
-
-        DebugUtils.log("value to send: '" + stringBytes + "' ");
-
+    private static List<Integer> encodeData(String stringData) {
+        DebugUtils.log("value to send: '" + stringData + "' ");
         List<Integer> frequencies = new ArrayList<>();
-        frequencies.add(Soundify.HZ_BEGIN);
-        String antByte = "";
-        String stringByte;
-        for (int i = 0; i < stringBytes.length(); i++) {
-
-            stringByte = stringBytes.substring(i, i + 1);
-
-            DebugUtils.log("ant: " + antByte);
-            DebugUtils.log("atu: " + stringByte);
-            DebugUtils.log("");
-
-            if (antByte.equals(stringByte)) {
-                frequencies.add(Soundify.HZ_SEPARATOR);
-            } else if (stringByte.equals("0")) {
-                frequencies.add(Soundify.HZ_ZERO);
-                antByte = "0";
-            } else if (stringByte.equals("1")) {
-                frequencies.add(Soundify.HZ_ONE);
-                antByte = "1";
-            }
-
+        frequencies.add(ConstantsHz.BEGIN.getHz());
+        for (int i = 0; i < stringData.length(); i++) {
+            frequencies.add(ConstantsHz.a.getHz());//TODO
         }
-        frequencies.add(Soundify.HZ_END);
+        frequencies.add(ConstantsHz.END.getHz());
         return frequencies;
     }
 

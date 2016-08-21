@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        soundify.send("");
+                        soundify.send(messageSend.getText().toString());
                     }
                 })
                 .build();

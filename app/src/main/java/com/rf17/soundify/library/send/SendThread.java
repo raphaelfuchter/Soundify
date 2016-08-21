@@ -30,7 +30,7 @@ public class SendThread extends Thread {
                 AudioTrack.MODE_STREAM
         );
         track.play();
-        List<Integer> frequencies = encodeData(data);
+        List<Integer> frequencies = Encoder.encodeData(data);
         for (int freq : frequencies) {
             short[] samples = generateSamples(freq);
             track.write(samples, 0, 620);
@@ -48,15 +48,6 @@ public class SendThread extends Thread {
         return sample;
     }
 
-    private static List<Integer> encodeData(String stringData) {
-        DebugUtils.log("value to send: '" + stringData + "' ");
-        List<Integer> frequencies = new ArrayList<>();
-        frequencies.add(ConstantsHz.BEGIN.getHz());
-        for (int i = 0; i < stringData.length(); i++) {
-            frequencies.add(ConstantsHz.a.getHz());//TODO
-        }
-        frequencies.add(ConstantsHz.END.getHz());
-        return frequencies;
-    }
+
 
 }

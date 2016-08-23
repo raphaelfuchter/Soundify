@@ -30,17 +30,17 @@ public class Soundify extends BytesUtils {
      * This function makes the library starts to listen.
      * @since 0.1
      * */
-    public void startListening(){
+    /*public void startListening(){
         receiveThread.startThread();
-    }
+    }*/
 
     /**
      * This function makes the library stop to listen.
      * @since 0.1
      * */
-    public void stopListening(){
+    /*public void stopListening(){
         receiveThread.stopThread();
-    }
+    }*/
 
     /**
      * This function transmit the message.

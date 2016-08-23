@@ -9,7 +9,7 @@ public class Decoder {
      * @param pitchHz pitchHz
      * @return desc
      */
-    public static String decoderHzInChar(Float pitchHz) {
+    public static String decodeHzInChar(Float pitchHz) {
         for (ConstantsHz hz : ConstantsHz.values()) {
             if (hz.getHz() == pitchHz) {
                 return String.valueOf(hz.getDesc());

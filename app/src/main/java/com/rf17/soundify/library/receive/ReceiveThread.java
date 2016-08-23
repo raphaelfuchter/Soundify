@@ -2,9 +2,9 @@ package com.rf17.soundify.library.receive;
 
 import android.app.Activity;
 
-import com.rf17.soundify.library.Constants.ConstantesAudio;
 import com.rf17.soundify.library.Constants.ConstantsHz;
 import com.rf17.soundify.library.Soundify;
+import com.rf17.soundify.library.utils.AudioUtils;
 import com.rf17.soundify.library.utils.DebugUtils;
 
 import be.tarsos.dsp.AudioDispatcher;
@@ -27,28 +27,26 @@ public class ReceiveThread {
     }
 
     private void initThread() {
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050,1024,0);
+
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
-            public void handlePitch(PitchDetectionResult result, AudioEvent e) {
-                final Float pitchInHz = result.getPitch();
+            public void handlePitch(PitchDetectionResult result,AudioEvent e) {
+                final float pitchInHz = result.getPitch();
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        decodeInitValue(pitchInHz);
-                        decodeValue(pitchInHz);
-                        decodeFinishValue(pitchInHz);
+                        decodeValues(pitchInHz);
                     }
                 });
             }
         };
-        AudioProcessor audioProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, ConstantesAudio.SAMPLE_RATE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue(), pdh);
-
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(ConstantesAudio.SAMPLE_RATE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue() / 2);
-        dispatcher.addAudioProcessor(audioProcessor);
-        thread = new Thread(dispatcher, "SoundifyListener");
+        AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
+        dispatcher.addAudioProcessor(p);
+        new Thread(dispatcher,"Audio Dispatcher").start();
     }
 
-    public void startThread() {
+    /*public void startThread() {
         if(!thread.isAlive()){
             thread.start();
         }
@@ -58,28 +56,32 @@ public class ReceiveThread {
         if(thread.isAlive()) {
             thread.interrupt();
         }
+    }*/
+
+    private void decodeValues(Float pitchInHz){
+        decodeInitValue(pitchInHz);
+        decodeNormalValue(pitchInHz);
+        decodeFinishValue(pitchInHz);
     }
 
-    private boolean isCorrectedFrequency(int frequency, int hz){
-        return frequency > hz - ConstantsHz.TX_ERROR.getHz() &&
-                frequency < hz + ConstantsHz.TX_ERROR.getHz();
-    }
-
-    public void decodeInitValue(Float frequencyInHz) {
-        if(isCorrectedFrequency(frequencyInHz.intValue(), ConstantsHz.BEGIN.getHz())){
+    private void decodeInitValue(Float frequencyInHz) {
+        if(AudioUtils.isCorrectedFrequency(frequencyInHz.intValue(), ConstantsHz.BEGIN.getHz())){
             DebugUtils.log("init");
             returnValue = "";
         }
     }
 
-    public void decodeValue(Float frequencyInHz) {
+    private void decodeNormalValue(Float frequencyInHz) {
         //if(isCorrectedFrequency(frequencyInHz.intValue(), Soundify.HZ_ONE)){
-            returnValue = Decoder.decoderHzInChar(frequencyInHz);
+        if(frequencyInHz > 800.0) {
+            DebugUtils.log("freqrec: " + frequencyInHz);
+            returnValue = Decoder.decodeHzInChar(frequencyInHz);
+        }
         //}
     }
 
-    public void decodeFinishValue(Float frequencyInHz) {
-        if(isCorrectedFrequency(frequencyInHz.intValue(), ConstantsHz.END.getHz())){
+    private void decodeFinishValue(Float frequencyInHz) {
+        if(AudioUtils.isCorrectedFrequency(frequencyInHz.intValue(), ConstantsHz.END.getHz())){
             DebugUtils.log("finish");
             thread.interrupt();
             if (thread.isInterrupted()) {

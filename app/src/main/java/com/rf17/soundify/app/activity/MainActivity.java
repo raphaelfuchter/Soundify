@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setAdapter(mAdapter);
 
             soundify = new Soundify(this);
-            soundify.startListening();
+            //soundify.startListening();
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
                 public void OnReceiveData(String data) {
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(soundify != null) {
-            soundify.startListening();
-        }
+        //if(soundify != null) {
+            //soundify.startListening();
+        //}
         ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
@@ -118,19 +118,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        soundify.stopListening();
+        //soundify.stopListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        soundify.stopListening();
+        //soundify.stopListening();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        soundify.stopListening();
+        //soundify.stopListening();
     }
 
 }

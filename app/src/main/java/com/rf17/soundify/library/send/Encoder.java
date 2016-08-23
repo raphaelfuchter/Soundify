@@ -10,17 +10,17 @@ public class Encoder {
 
     /**
      *
-     * @param stringData stringData
+     * @param data stringData
      * @return desc
      */
-    public static List<Integer> encodeData(String stringData) {
-        DebugUtils.log("value to send: '" + stringData + "' ");
+    public static List<Integer> encodeStringToHz(String data) {
+        DebugUtils.log("value to send: '" + data + "' ");
         List<Integer> frequencies = new ArrayList<>();
-        frequencies.add(ConstantsHz.BEGIN.getHz());
-        for (int i = 0; i < stringData.length(); i++) {
-            frequencies.add(encoderCharInHz(stringData.charAt(i)));
+        frequencies.add(2500);
+        for (int i = 0; i < data.length(); i++) {
+            frequencies.add(3000);
         }
-        frequencies.add(ConstantsHz.END.getHz());
+        frequencies.add(4500);
         return frequencies;
     }
 

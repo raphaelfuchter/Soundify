@@ -8,6 +8,11 @@ import java.util.List;
 
 public class Encoder {
 
+    /**
+     *
+     * @param stringData stringData
+     * @return desc
+     */
     public static List<Integer> encodeData(String stringData) {
         DebugUtils.log("value to send: '" + stringData + "' ");
         List<Integer> frequencies = new ArrayList<>();
@@ -19,6 +24,11 @@ public class Encoder {
         return frequencies;
     }
 
+    /**
+     *
+     * @param carac carac
+     * @return desc
+     */
     private static int encoderCharInHz(char carac) {
         for (ConstantsHz hz : ConstantsHz.values()) {
             if (hz.getDesc() == carac) {

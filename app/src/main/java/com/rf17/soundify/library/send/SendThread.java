@@ -4,11 +4,8 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import com.rf17.soundify.library.Constants.ConstantsHz;
-import com.rf17.soundify.library.Soundify;
-import com.rf17.soundify.library.utils.DebugUtils;
+import com.rf17.soundify.library.Constants.ConstantesAudio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SendThread extends Thread {
@@ -23,10 +20,10 @@ public class SendThread extends Thread {
     public void run() {
         final AudioTrack track = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
-                Soundify.SAMPLE_RATE,
+                ConstantesAudio.SAMPLE_RATE.getValue(),
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                Soundify.BUFFER_SIZE,
+                ConstantesAudio.BUFFER_SIZE.getValue(),
                 AudioTrack.MODE_STREAM
         );
         track.play();
@@ -38,8 +35,8 @@ public class SendThread extends Thread {
     }
 
     private static short[] generateSamples(float frequency) {
-        final short sample[] = new short[Soundify.BUFFER_SIZE];
-        final double increment = 50 * Math.PI * frequency / Soundify.SAMPLE_RATE;
+        final short sample[] = new short[ConstantesAudio.BUFFER_SIZE.getValue()];
+        final double increment = 50 * Math.PI * frequency / ConstantesAudio.SAMPLE_RATE.getValue();
         double angle = 0;
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = (short) (Math.sin(angle) * Short.MAX_VALUE);

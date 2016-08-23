@@ -4,6 +4,11 @@ import com.rf17.soundify.library.Constants.ConstantsHz;
 
 public class Decoder {
 
+    /**
+     *
+     * @param pitchHz pitchHz
+     * @return desc
+     */
     public static String decoderHzInChar(Float pitchHz) {
         for (ConstantsHz hz : ConstantsHz.values()) {
             if (hz.getHz() == pitchHz) {

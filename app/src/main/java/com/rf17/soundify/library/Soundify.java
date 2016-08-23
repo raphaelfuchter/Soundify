@@ -9,16 +9,6 @@ import com.rf17.soundify.library.send.SendThread;
 public class Soundify extends BytesUtils {
 
     /**
-     * //TODO Colocar comentario
-     */
-    public static final int SAMPLE_RATE = 22050;
-
-    /**
-     * The size of the buffer defines how much samples are processed in one step. Common values are 1024,2048.
-     */
-    public static final int BUFFER_SIZE = 1024;
-
-    /**
      *
      */
     public static SoundifyListener soundifyListener;

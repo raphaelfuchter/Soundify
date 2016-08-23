@@ -67,21 +67,21 @@ public enum ConstantsHz {
     BEGIN('<', 4000),
     END('>', 5000),
     TX_ERROR('@', 50),
-    SEPARATOR('|', 988);//used as a separator between repeated digits
+    SEPARATOR('|', 988); // used as a separator between repeated digits
 
     private char desc;
     private int hz;
 
-    ConstantsHz(char desc, int hz){
+    ConstantsHz(char desc, int hz) {
         this.desc = desc;
         this.hz = hz;
     }
 
-    public char getDesc(){
+    public char getDesc() {
         return this.desc;
     }
 
-    public int getHz(){
+    public int getHz() {
         return this.hz;
     }
 

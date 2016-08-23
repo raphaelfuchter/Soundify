@@ -2,6 +2,7 @@ package com.rf17.soundify.library.receive;
 
 import android.app.Activity;
 
+import com.rf17.soundify.library.Constants.ConstantesAudio;
 import com.rf17.soundify.library.Constants.ConstantsHz;
 import com.rf17.soundify.library.Soundify;
 import com.rf17.soundify.library.utils.DebugUtils;
@@ -40,9 +41,9 @@ public class ReceiveThread {
                 });
             }
         };
-        AudioProcessor audioProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, pdh);
+        AudioProcessor audioProcessor = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, ConstantesAudio.SAMPLE_RATE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue(), pdh);
 
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Soundify.SAMPLE_RATE, Soundify.BUFFER_SIZE, Soundify.BUFFER_SIZE / 2);
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(ConstantesAudio.SAMPLE_RATE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue(), ConstantesAudio.BUFFER_SIZE.getValue() / 2);
         dispatcher.addAudioProcessor(audioProcessor);
         thread = new Thread(dispatcher, "SoundifyListener");
     }

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setAdapter(mAdapter);
 
             soundify = new Soundify(this);
-            //soundify.startListening();
+            soundify.startListening();
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
                 public void OnReceiveData(String data) {
@@ -90,7 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        soundify.send(messageSend.getText().toString());
+                        try {
+                            soundify.send(messageSend.getText().toString().getBytes("utf-8"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .build();

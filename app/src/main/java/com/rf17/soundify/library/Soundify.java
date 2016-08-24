@@ -2,9 +2,10 @@ package com.rf17.soundify.library;
 
 import android.app.Activity;
 
+import com.rf17.soundify.library.receive.ReceiverThread;
 import com.rf17.soundify.library.utils.BytesUtils;
-import com.rf17.soundify.library.receive.ReceiveThread;
-import com.rf17.soundify.library.send.SendThread;
+import com.rf17.soundify.library.receive.Receiver;
+import com.rf17.soundify.library.send.Sender;
 
 public class Soundify extends BytesUtils {
 
@@ -16,40 +17,40 @@ public class Soundify extends BytesUtils {
     /**
      *
      */
-    private ReceiveThread receiveThread;
+    private ReceiverThread receiveThread;
 
     /**
      * This function is used to initialize the Soundify instance,
      * @param activity Current Activity of your app.
      */
     public Soundify(Activity activity) {
-        receiveThread = new ReceiveThread(activity);
+        receiveThread = new ReceiverThread(activity);
     }
 
     /**
      * This function makes the library starts to listen.
      * @since 0.1
      * */
-    /*public void startListening(){
+    public void startListening(){
         receiveThread.startThread();
-    }*/
+    }
 
     /**
      * This function makes the library stop to listen.
      * @since 0.1
      * */
-    /*public void stopListening(){
+    public void stopListening(){
         receiveThread.stopThread();
-    }*/
+    }
 
     /**
      * This function transmit the message.
      *
-     * @param message Send's data.
+     * @param data Send's data.
      * @since 0.1
      */
-    public void send(String message) {
-        new SendThread(message).start();
+    public void send(byte[] data) {
+        Sender.getSender().send(data);
     }
 
     /**

@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
 import com.rf17.soundify.app.model.Message;
 import com.rf17.soundify.library.Soundify;
+import com.rf17.soundify.library.utils.DebugUtils;
 import com.rf17.soundifyapp.R;
 
 import java.text.SimpleDateFormat;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         try {
+                            DebugUtils.log("msg: "+messageSend.getText().toString());
                             soundify.send(messageSend.getText().toString().getBytes("utf-8"));
                         }catch (Exception e){
                             e.printStackTrace();
@@ -107,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //if(soundify != null) {
-            //soundify.startListening();
-        //}
+        if(soundify != null) {
+            soundify.startListening();
+        }
         ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
@@ -122,19 +124,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //soundify.stopListening();
+        soundify.stopListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //soundify.stopListening();
+        soundify.stopListening();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //soundify.stopListening();
+        soundify.stopListening();
     }
 
 }

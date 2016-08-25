@@ -1,9 +1,6 @@
 package com.rf17.soundify.library.receive;
 
-import android.media.AudioFormat;
 import android.media.AudioRecord;
-import android.media.AudioTrack;
-import android.media.MediaRecorder;
 import android.util.Log;
 
 import com.rf17.soundify.library.Command;
@@ -15,9 +12,13 @@ import java.util.List;
 
 public class Receiver {
 
-    public byte[] receive() {
-        AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, Config.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, Config.AUDIO_FORMAT, AudioTrack.getMinBufferSize(Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) * 4);
-        audioRecord.startRecording();
+    private boolean mStoped;
+    private boolean mStarted;
+    private static short NONSENSE_DATA = 256;
+
+    public byte[] receive(AudioRecord audioRecord) {
+        //AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, Config.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, Config.AUDIO_FORMAT, AudioTrack.getMinBufferSize(Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) * 4);
+        //audioRecord.startRecording();
         mStoped = false;
         mStarted = false;
         List<Byte> list = new ArrayList<>();
@@ -47,7 +48,7 @@ public class Receiver {
         }
         short freq = calcFreq(floatData);
         short data = (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
-        Log.v("ParseRecData", "freq is " + freq + "data is " + data);
+        Log.v("ParseRecData", "freq is " + freq + " | data is " + data);
         switch (data) {
             case Command.START_COMMAND:
                 mStarted = true;
@@ -89,9 +90,5 @@ public class Receiver {
         int r = count == 1 ? i - 1 : i;
         return 1 << r;
     }
-
-    private boolean mStoped;
-    private boolean mStarted;
-    private static short NONSENSE_DATA = 256;
 
 }

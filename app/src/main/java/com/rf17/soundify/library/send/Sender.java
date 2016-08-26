@@ -5,7 +5,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 
 import com.rf17.soundify.library.Command;
-import com.rf17.soundify.library.fm.Config;
+import com.rf17.soundify.library.Config;
 
 import java.util.ArrayList;
 import java.util.List;

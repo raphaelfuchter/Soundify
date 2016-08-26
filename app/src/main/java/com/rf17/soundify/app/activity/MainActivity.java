@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText messageSend;
 
     private RecyclerView.Adapter mAdapter;
+    private MyRecyclerViewAdapter recyclerViewAdapter;
 
     private ArrayList<Message> messages = new ArrayList<>();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
@@ -51,14 +52,16 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new MyRecyclerViewAdapter(messages);
             mRecyclerView.setAdapter(mAdapter);
+            recyclerViewAdapter = (MyRecyclerViewAdapter) mAdapter;
 
             soundify = new Soundify(this);
             soundify.startListening();
             soundify.setSoundifyListener(new Soundify.SoundifyListener() {
                 @Override
-                public void OnReceiveData(String data) {
-                    Message message = new Message(data, sdf.format(new Date()));
-                    ((MyRecyclerViewAdapter) mAdapter).addItem(message, 0);
+                public void OnReceiveData(byte[] data) {
+                    String stringData = Soundify.bytesToString(data);
+                    Message message = new Message(stringData, sdf.format(new Date()));
+                    recyclerViewAdapter.addItem(message, 0);
                 }
 
                 @Override
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         try {
                             DebugUtils.log("msg: "+messageSend.getText().toString());
-                            soundify.send(messageSend.getText().toString().getBytes("utf-8"));
+                            soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -112,11 +115,10 @@ public class MainActivity extends AppCompatActivity {
         if(soundify != null) {
             soundify.startListening();
         }
-        ((MyRecyclerViewAdapter) mAdapter).setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
+        recyclerViewAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                ((MyRecyclerViewAdapter) mAdapter).deleteItem(position);
-
+                recyclerViewAdapter.deleteItem(position);
             }
         });
     }

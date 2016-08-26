@@ -25,6 +25,7 @@ public class Soundify extends BytesUtils {
      */
     public Soundify(Activity activity) {
         receiveThread = new ReceiverThread(activity);
+        Sender.getSender();
     }
 
     /**
@@ -32,7 +33,7 @@ public class Soundify extends BytesUtils {
      * @since 0.1
      * */
     public void startListening(){
-        receiveThread.startThread();
+        receiveThread.inicializeReceiver();
     }
 
     /**
@@ -40,7 +41,7 @@ public class Soundify extends BytesUtils {
      * @since 0.1
      * */
     public void stopListening(){
-        receiveThread.stopThread();
+        receiveThread.stopReceiver();
     }
 
     /**
@@ -65,7 +66,7 @@ public class Soundify extends BytesUtils {
          * @param data data received.
          * @since 0.1
          */
-        void OnReceiveData(String data);
+        void OnReceiveData(byte[] data);
 
         /**
          * This is called when the Soundify receive an error.

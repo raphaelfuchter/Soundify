@@ -1,42 +1,102 @@
 package com.rf17.soundify.library.receive;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.AudioTrack;
+import android.media.MediaRecorder;
 import android.util.Log;
 
-import com.rf17.soundify.library.Command;
 import com.rf17.soundify.library.Soundify;
-import com.rf17.soundify.library.fft.FFT;
 import com.rf17.soundify.library.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Receiver {
 
-    public static short calcFreq(float[] floatData) {
-        int size = floatData.length;
-        int fftSize = calcFftSize(size);
-        FFT fft = new FFT(fftSize, Config.SAMPLE_RATE);
-        fft.forward(floatData);
-        float maxAmp = 0;
-        short index = 0;
-        for (short i = Config.BASE_FREQ; i < Config.BASE_FREQ + Config.FREQ_STEP * 140; i++) {
-            float curAmp = fft.getFreq(i);
-            if (curAmp > maxAmp) {
-                maxAmp = curAmp;
-                index = i;
-            }
+    private AudioRecord audioRecord;
+    private Thread thread;
+    private boolean threadRunning = true;
+    private static Receiver sReceiver;
+
+    private List<Byte> list = new ArrayList<>();
+    private short[] recordedData = new short[Config.TIME_BAND];
+
+    public static Receiver getReceiver() {
+        if (sReceiver == null) {
+            sReceiver = new Receiver();
         }
-        return index;
+        return sReceiver;
     }
 
-    private static int calcFftSize(int size) {
-        int count = 0;
-        int i;
-        for (i = 0; i < 32 && size != 0; i++) {
-            if ((size & 1) == 1) {
-                count++;
+    public Receiver() {
+        initThread();
+    }
+
+    private void initThread() {
+        thread = new Thread() {
+            @Override
+            public void run() {
+                while (threadRunning) {
+                    audioRecord.read(recordedData, 0, Config.TIME_BAND);
+                    short parsedData = parseRecData(recordedData);
+                    if (parsedData != Config.NONSENSE_DATA) {
+                        list.add((byte) parsedData);
+                    }
+
+
+                }
             }
-            size >>= 1;
+        };
+    }
+
+    public short parseRecData(short[] recordedData) {
+        int size = recordedData.length;
+        float[] floatData = new float[size];
+        for (int i = 0; i < size; i++) {
+            floatData[i] = recordedData[i];
         }
-        int r = count == 1 ? i - 1 : i;
-        return 1 << r;
+        short freq = ReceiverUtils.calcFreq(floatData);
+        short data = (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
+        Log.v("ParseRecData", "freq is " + freq + " | data is " + data);
+        switch (data) {
+            case Config.START_COMMAND:
+                list = new ArrayList<>();
+                return Config.NONSENSE_DATA;
+            case Config.STOP_COMMAND:
+                int sizeRet = list.size();
+                byte[] retByte = new byte[sizeRet];
+                for (int i = 0; i < sizeRet; i++) {
+                    retByte[i] = list.get(i);
+                }
+                Soundify.soundifyListener.OnReceiveData(retByte);
+                return Config.NONSENSE_DATA;
+            default:
+                //return !mStarted || data >= Command.STOP_COMMAND ? NONSENSE_DATA : data;
+                return data >= Config.STOP_COMMAND ? Config.NONSENSE_DATA : data;
+        }
+    }
+
+    public void inicializeReceiver() {
+        if (audioRecord == null || audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
+            audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, Config.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, Config.AUDIO_FORMAT, AudioTrack.getMinBufferSize(Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) * 4);
+        }
+        if (audioRecord.getState() != AudioRecord.RECORDSTATE_RECORDING) {
+            audioRecord.startRecording();
+        }
+        if(!thread.isAlive()){
+            thread.start();
+        }
+    }
+
+    public void stopReceiver() {
+        if (audioRecord != null && audioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
+            audioRecord.stop();
+            audioRecord.release();
+        }
+        if(thread.isAlive()) {
+            thread.interrupt();
+        }
     }
 
 }

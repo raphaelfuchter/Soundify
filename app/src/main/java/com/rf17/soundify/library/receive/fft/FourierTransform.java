@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU Library General Public License along with this program; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package com.rf17.soundify.library.fft;
+package com.rf17.soundify.library.receive.fft;
  
 /** A Fourier Transform is an algorithm that transforms a signal in the time domain, such as a sample buffer, into a signal in the
  * frequency domain, often called the spectrum. The spectrum does not represent individual frequencies, but actually represents
@@ -130,16 +130,7 @@ public abstract class FourierTransform {
     // because the size of the arrays will depend on the implementation being used
     // this enforces that responsibility
     protected abstract void allocateArrays ();
- 
-    protected void setComplex (float[] r, float[] i) {
-        if (real.length != r.length && imag.length != i.length) {
-            throw new IllegalArgumentException("This won't work");
-        } else {
-            System.arraycopy(r, 0, real, 0, r.length);
-            System.arraycopy(i, 0, imag, 0, i.length);
-        }
-    }
- 
+
     // fill the spectrum array with the amps of the data in real and imag
     // used so that this class can handle creating the average array
     // and also do spectrum shaping if necessary

@@ -1,11 +1,12 @@
 package com.rf17.soundify.library.send;
 
+import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import com.rf17.soundify.library.Command;
 import com.rf17.soundify.library.Config;
+import com.rf17.soundify.library.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Sender {
 
     private static Sender sSender;
     private AudioTrack mAudioTrack;
-    private static final int COMMAND_REPEAT_NUM = 5;
+    private static final int COMMAND_REPEAT_NUM = 1;
     private static final int MAX_SIGNAL_STRENGTH = 65535;
 
     public static Sender getSender() {
@@ -24,25 +25,26 @@ public class Sender {
         return sSender;
     }
 
-    public void send(byte[] data) {
+    public void send(Activity activity, byte[] data) {
         List<Short> list = new ArrayList<>();
-        appendCommand(list, Command.START_COMMAND);
+        appendCommand(list, Config.START_COMMAND);
         for (byte b : data) {
             append(list, b);
         }
-        appendCommand(list, Command.STOP_COMMAND);
-        sendData(list);
+        appendCommand(list, Config.STOP_COMMAND);
+        sendData(activity, list);
     }
 
-    private void sendData(List<Short> list) {
-        int size = list.size();
-        short[] data = new short[size];
-        for (int i = 0; i < size; i++) {
-            data[i] = list.get(i);
-        }
-        generateAudioTrackIfNecessary();
-        mAudioTrack.write(data, 0, size);
-        mAudioTrack.play();
+    private void sendData(Activity activity, final List<Short> list) {
+        generateAudioTrack();
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAudioTrack.write(ListUtils.convertListToArray(list), 0, list.size());
+                mAudioTrack.play();
+            }
+        });
     }
 
     private void append(List<Short> list, short b) {
@@ -63,7 +65,7 @@ public class Sender {
         return (short) (Config.BASE_FREQ + b * Config.FREQ_STEP);
     }
 
-    private void generateAudioTrackIfNecessary() {
+    private void generateAudioTrack() {
         if (mAudioTrack == null || mAudioTrack.getState() != AudioTrack.STATE_INITIALIZED) {
             mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, Config.AUDIO_FORMAT, AudioTrack.getMinBufferSize(Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) * 4, AudioTrack.MODE_STREAM);
         }

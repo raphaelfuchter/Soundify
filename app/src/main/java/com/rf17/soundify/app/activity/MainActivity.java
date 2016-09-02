@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText messageSend;
 
-    private RecyclerView.Adapter mAdapter;
     private MyRecyclerViewAdapter recyclerViewAdapter;
 
     private ArrayList<Message> messages = new ArrayList<>();
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new MyRecyclerViewAdapter(messages);
+            RecyclerView.Adapter mAdapter = new MyRecyclerViewAdapter(messages);
             mRecyclerView.setAdapter(mAdapter);
             recyclerViewAdapter = (MyRecyclerViewAdapter) mAdapter;
 
@@ -113,7 +112,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(soundify != null) {
-            soundify.startListening();
+            try {
+                soundify.startListening();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
         recyclerViewAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
@@ -126,19 +130,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        soundify.stopListening();
+        try {
+            soundify.stopListening();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        soundify.stopListening();
+        try {
+            soundify.stopListening();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        soundify.stopListening();
+        try {
+            soundify.stopListening();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

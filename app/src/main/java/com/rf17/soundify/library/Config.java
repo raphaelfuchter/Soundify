@@ -11,4 +11,9 @@ public class Config {
 	public static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
 
 	public static final short NONSENSE_DATA = 256;
+
+	public static final short START_COMMAND = 130;
+	public static final short STOP_COMMAND = 128;
+
+    public static final boolean DEBUG_ON = true;
 }

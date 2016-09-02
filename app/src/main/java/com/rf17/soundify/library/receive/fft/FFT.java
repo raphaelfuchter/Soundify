@@ -11,7 +11,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
  
-package com.rf17.soundify.library.fft;
+package com.rf17.soundify.library.receive.fft;
  
 /** FFT stands for Fast Fourier Transform. It is an efficient way to calculate the Complex Discrete Fourier Transform. There is not
  * much to say about this class other than the fact that when you want to analyze the spectrum of an audio buffer you will almost
@@ -131,10 +131,5 @@ public class FFT extends FourierTransform {
             coslookup[i] = (float)Math.cos(-(float)Math.PI / i);
         }
     }
- 
-// public static void main (String[] argv) {
-// FFT fft = new FFT(1024, 44100);
-// System.out.println(fft.getRealPart().length);
-// System.out.println(fft.getSpectrum().length);
-// }
+
 }

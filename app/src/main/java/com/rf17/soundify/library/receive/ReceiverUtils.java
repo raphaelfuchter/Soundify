@@ -1,6 +1,6 @@
 package com.rf17.soundify.library.receive;
 
-import com.rf17.soundify.library.fft.FFT;
+import com.rf17.soundify.library.receive.fft.FFT;
 import com.rf17.soundify.library.Config;
 
 public class ReceiverUtils {

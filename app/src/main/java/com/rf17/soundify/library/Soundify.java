@@ -2,12 +2,14 @@ package com.rf17.soundify.library;
 
 import android.app.Activity;
 
-import com.rf17.soundify.library.receive.ReceiverThread;
-import com.rf17.soundify.library.utils.BytesUtils;
+import com.rf17.soundify.library.exception.SoundifyException;
 import com.rf17.soundify.library.receive.Receiver;
+import com.rf17.soundify.library.utils.BytesUtils;
 import com.rf17.soundify.library.send.Sender;
 
 public class Soundify extends BytesUtils {
+
+    private Activity activity;
 
     /**
      *
@@ -15,33 +17,28 @@ public class Soundify extends BytesUtils {
     public static SoundifyListener soundifyListener;
 
     /**
-     *
-     */
-    private ReceiverThread receiveThread;
-
-    /**
-     * This function is used to initialize the Soundify instance,
-     * @param activity Current Activity of your app.
+     * This function is used to initialize the Soundify instance
      */
     public Soundify(Activity activity) {
-        receiveThread = new ReceiverThread(activity);
-        Sender.getSender();
+        this.activity = activity;
+        //Receiver.getReceiver();
+        //Sender.getSender();
     }
 
     /**
      * This function makes the library starts to listen.
      * @since 0.1
      * */
-    public void startListening(){
-        receiveThread.inicializeReceiver();
+    public void startListening() throws SoundifyException {
+        Receiver.getReceiver().inicializeReceiver();
     }
 
     /**
      * This function makes the library stop to listen.
      * @since 0.1
      * */
-    public void stopListening(){
-        receiveThread.stopReceiver();
+    public void stopListening() throws SoundifyException {
+        Receiver.getReceiver().stopReceiver();
     }
 
     /**
@@ -51,7 +48,7 @@ public class Soundify extends BytesUtils {
      * @since 0.1
      */
     public void send(byte[] data) {
-        Sender.getSender().send(data);
+        Sender.getSender().send(activity, data);
     }
 
     /**

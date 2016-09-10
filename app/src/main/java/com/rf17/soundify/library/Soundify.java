@@ -21,8 +21,6 @@ public class Soundify extends BytesUtils {
      */
     public Soundify(Activity activity) {
         this.activity = activity;
-        //Receiver.getReceiver();
-        //Sender.getSender();
     }
 
     /**

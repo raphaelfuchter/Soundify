@@ -9,6 +9,7 @@ import com.rf17.soundify.library.Soundify;
 import com.rf17.soundify.library.Config;
 import com.rf17.soundify.library.exception.SoundifyException;
 import com.rf17.soundify.library.utils.DebugUtils;
+import com.rf17.soundify.library.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,29 +50,27 @@ public class Receiver {
         };
     }
 
-    public short parseRecData(short[] recordedData) {
-        int size = recordedData.length;
-        float[] floatData = new float[size];
-        for (int i = 0; i < size; i++) {
-            floatData[i] = recordedData[i];
-        }
+    private short parseRecData(short[] recordedData) {
+        float[] floatData = ListUtils.convertArrayShortToArrayFloat(recordedData);
         short freq = ReceiverUtils.calcFreq(floatData);
-        short data = (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
+        short data = ReceiverUtils.calcData(freq);
+
         DebugUtils.log("Freq: " + freq + "  |  data: " + data);
+
         switch (data) {
             case Config.START_COMMAND:
                 list = new ArrayList<>();
                 return Config.NONSENSE_DATA;
             case Config.STOP_COMMAND:
-                int sizeRet = list.size();
-                byte[] retByte = new byte[sizeRet];
-                for (int i = 0; i < sizeRet; i++) {
-                    retByte[i] = list.get(i);
-                }
+                byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
                 Soundify.soundifyListener.OnReceiveData(retByte);
                 return Config.NONSENSE_DATA;
             default:
-                return data >= Config.STOP_COMMAND ? Config.NONSENSE_DATA : data;
+                if(data >= Config.STOP_COMMAND){
+                    return Config.NONSENSE_DATA;
+                }else{
+                    return data;
+                }
         }
     }
 

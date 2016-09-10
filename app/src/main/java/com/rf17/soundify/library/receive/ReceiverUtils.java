@@ -5,6 +5,10 @@ import com.rf17.soundify.library.Config;
 
 public class ReceiverUtils {
 
+    public static short calcData(short freq){
+        return (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
+    }
+
     public static short calcFreq(float[] floatData) {
         int size = floatData.length;
         int fftSize = calcFftSize(size);

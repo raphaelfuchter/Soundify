@@ -15,7 +15,6 @@ public class Sender {
 
     private static Sender sSender;
     private AudioTrack mAudioTrack;
-    private static final int COMMAND_REPEAT_NUM = 1;
     private static final int MAX_SIGNAL_STRENGTH = 65535;
 
     public static Sender getSender() {
@@ -29,7 +28,7 @@ public class Sender {
         List<Short> list = new ArrayList<>();
         appendCommand(list, Config.START_COMMAND);
         for (byte b : data) {
-            append(list, b);
+            appendByte(list, b);
         }
         appendCommand(list, Config.STOP_COMMAND);
         sendData(activity, list);
@@ -37,17 +36,16 @@ public class Sender {
 
     private void sendData(Activity activity, final List<Short> list) {
         generateAudioTrack();
-
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAudioTrack.write(ListUtils.convertListToArray(list), 0, list.size());
                 mAudioTrack.play();
+                mAudioTrack.write(ListUtils.convertListShortToArrayShort(list), 0, list.size());
             }
         });
     }
 
-    private void append(List<Short> list, short b) {
+    private void appendByte(List<Short> list, short b) {
         int freq = calcFreq(b);
         for (int i = 0; i < Config.TIME_BAND; i++) {
             double angle = 2.0 * i * freq * Math.PI / Config.SAMPLE_RATE;
@@ -56,9 +54,7 @@ public class Sender {
     }
 
     private void appendCommand(List<Short> list, short command) {
-        for (int i = 0; i < COMMAND_REPEAT_NUM; i++) {
-            append(list, command);
-        }
+        appendByte(list, command);
     }
 
     private short calcFreq(short b) {

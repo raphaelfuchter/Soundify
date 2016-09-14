@@ -1,15 +1,15 @@
-package com.rf17.soundify.library.receive;
+package com.rf17.soundify.receive;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 
-import com.rf17.soundify.library.Soundify;
-import com.rf17.soundify.library.Config;
-import com.rf17.soundify.library.exception.SoundifyException;
-import com.rf17.soundify.library.utils.DebugUtils;
-import com.rf17.soundify.library.utils.ListUtils;
+import com.rf17.soundify.Config;
+import com.rf17.soundify.Soundify;
+import com.rf17.soundify.exception.SoundifyException;
+import com.rf17.soundify.utils.DebugUtils;
+import com.rf17.soundify.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,9 @@ public class Receiver {
                 return Config.NONSENSE_DATA;
             case Config.STOP_COMMAND:
                 byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
-                Soundify.soundifyListener.OnReceiveData(retByte);
+                if(retByte != null) {
+                    Soundify.soundifyListener.OnReceiveData(retByte);
+                }
                 return Config.NONSENSE_DATA;
             default:
                 if(data >= Config.STOP_COMMAND){

@@ -1,7 +1,6 @@
-package com.rf17.soundify.library;
+package com.rf17.soundify;
 
 import android.media.AudioFormat;
-
 
 public class Config {
 	public static final short BASE_FREQ = 3000;

@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU Library General Public License along with this program; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package com.rf17.soundify.library.receive.fft;
+package com.rf17.soundify.receive.fft;
  
 /** A Fourier Transform is an algorithm that transforms a signal in the time domain, such as a sample buffer, into a signal in the
  * frequency domain, often called the spectrum. The spectrum does not represent individual frequencies, but actually represents

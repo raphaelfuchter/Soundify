@@ -11,7 +11,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
  
-package com.rf17.soundify.library.receive.fft;
+package com.rf17.soundify.receive.fft;
  
 /** FFT stands for Fast Fourier Transform. It is an efficient way to calculate the Complex Discrete Fourier Transform. There is not
  * much to say about this class other than the fact that when you want to analyze the spectrum of an audio buffer you will almost

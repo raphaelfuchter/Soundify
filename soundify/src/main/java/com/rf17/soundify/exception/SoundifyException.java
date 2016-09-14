@@ -1,4 +1,4 @@
-package com.rf17.soundify.library.exception;
+package com.rf17.soundify.exception;
 
 public class SoundifyException extends Exception {
 

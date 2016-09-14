@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.rf17.soundify.Soundify;
 import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
 import com.rf17.soundify.app.model.Message;
-import com.rf17.soundify.library.Soundify;
-import com.rf17.soundify.library.utils.DebugUtils;
+import com.rf17.soundify.utils.DebugUtils;
 import com.rf17.soundifyapp.R;
 
 import java.text.SimpleDateFormat;
@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(mLayoutManager);
             RecyclerView.Adapter mAdapter = new MyRecyclerViewAdapter(messages);
             mRecyclerView.setAdapter(mAdapter);
+
+            DebugUtils.log("mAdapter: "+mAdapter);
+
             recyclerViewAdapter = (MyRecyclerViewAdapter) mAdapter;
 
             soundify = new Soundify(this);
@@ -119,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
+
+        DebugUtils.log("recyclerViewAdapter: "+recyclerViewAdapter);
+
         recyclerViewAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {

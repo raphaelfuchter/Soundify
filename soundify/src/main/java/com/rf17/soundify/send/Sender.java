@@ -1,12 +1,12 @@
-package com.rf17.soundify.library.send;
+package com.rf17.soundify.send;
 
 import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import com.rf17.soundify.library.Config;
-import com.rf17.soundify.library.utils.ListUtils;
+import com.rf17.soundify.Config;
+import com.rf17.soundify.utils.ListUtils;
 
 import java.util.ArrayList;
 import java.util.List;

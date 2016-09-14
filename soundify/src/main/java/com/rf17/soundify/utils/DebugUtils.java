@@ -1,8 +1,8 @@
-package com.rf17.soundify.library.utils;
+package com.rf17.soundify.utils;
 
 import android.util.Log;
 
-import com.rf17.soundify.library.Config;
+import com.rf17.soundify.Config;
 
 public class DebugUtils {
 

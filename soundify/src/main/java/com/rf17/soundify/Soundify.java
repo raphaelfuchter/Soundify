@@ -1,11 +1,11 @@
-package com.rf17.soundify.library;
+package com.rf17.soundify;
 
 import android.app.Activity;
 
-import com.rf17.soundify.library.exception.SoundifyException;
-import com.rf17.soundify.library.receive.Receiver;
-import com.rf17.soundify.library.utils.BytesUtils;
-import com.rf17.soundify.library.send.Sender;
+import com.rf17.soundify.exception.SoundifyException;
+import com.rf17.soundify.receive.Receiver;
+import com.rf17.soundify.send.Sender;
+import com.rf17.soundify.utils.BytesUtils;
 
 public class Soundify extends BytesUtils {
 

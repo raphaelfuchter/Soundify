@@ -1,4 +1,4 @@
-package com.rf17.soundify.library.utils;
+package com.rf17.soundify.utils;
 
 import java.util.List;
 

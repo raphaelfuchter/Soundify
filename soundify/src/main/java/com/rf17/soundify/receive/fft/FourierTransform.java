@@ -11,8 +11,9 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 package com.rf17.soundify.receive.fft;
- 
-/** A Fourier Transform is an algorithm that transforms a signal in the time domain, such as a sample buffer, into a signal in the
+
+/**
+ * A Fourier Transform is an algorithm that transforms a signal in the time domain, such as a sample buffer, into a signal in the
  * frequency domain, often called the spectrum. The spectrum does not represent individual frequencies, but actually represents
  * frequency bands centered on particular frequencies. The center frequency of each band is usually expressed as a fraction of the
  * sampling rate of the time domain signal and is equal to the index of the frequency band divided by the total number of bands.
@@ -20,7 +21,7 @@ package com.rf17.soundify.receive.fft;
  * frequency bands with indices less than half the length, because they correspond to frequencies below the <a
  * href="http://en.wikipedia.org/wiki/Nyquist_frequency">Nyquist frequency</a>. In other words, given a signal of length
  * <code>N</code>, there will be <code>N/2</code> frequency bands in the spectrum.
- * <p>
+ * <p/>
  * As an example, if you construct a FourierTransform with a <code>timeSize</code> of 1024 and and a <code>sampleRate</code> of
  * 44100 Hz, then the spectrum will contain values for frequencies below 22010 Hz, which is the Nyquist frequency (half the sample
  * rate). If you ask for the value of band number 5, this will correspond to a frequency band centered on
@@ -30,13 +31,13 @@ package com.rf17.soundify.receive.fft;
  * of these relationships, though it is good to be aware of them. The function <code>getFreq()</code> allows you to query the
  * spectrum with a frequency in Hz and the function <code>getBandWidth()</code> will return the bandwidth in Hz of each frequency
  * band in the spectrum.
- * <p>
+ * <p/>
  * <b>Usage</b>
- * <p>
+ * <p/>
  * A typical usage of a FourierTransform is to analyze a signal so that the frequency spectrum may be represented in some way,
  * typically with vertical lines. You could do this in Processing with the following code, where <code>audio</code> is an
  * AudioSource and <code>fft</code> is an FFT (one of the derived classes of FourierTransform).
- * 
+ * <p/>
  * <pre>
  * fft.forward(audio.left);
  * for (int i = 0; i < fft.specSize(); i++) {
@@ -44,24 +45,24 @@ package com.rf17.soundify.receive.fft;
  *  line(i, height, i, height - fft.getBand(i) * 4);
  * }
  * </pre>
- * 
+ * <p/>
  * <b>Windowing</b>
- * <p>
+ * <p/>
  * Windowing is the process of shaping the audio samples before transforming them to the frequency domain. If you call the
  * <code>window()</code> function with an appropriate constant, such as FourierTransform.HAMMING, the sample buffers passed to the
  * object for analysis will be shaped by the current window before being transformed. The result of using a window is to reduce
  * the noise in the spectrum somewhat.
- * <p>
+ * <p/>
  * <b>Averages</b>
- * <p>
+ * <p/>
  * FourierTransform also has functions that allow you to request the creation of an average spectrum. An average spectrum is
  * simply a spectrum with fewer bands than the full spectrum where each average band is the average of the amplitudes of some
  * number of contiguous frequency bands in the full spectrum.
- * <p>
+ * <p/>
  * <code>linAverages()</code> allows you to specify the number of averages that you want and will group frequency bands into
  * groups of equal number. So if you have a spectrum with 512 frequency bands and you ask for 64 averages, each average will span
  * 8 bands of the full spectrum.
- * <p>
+ * <p/>
  * <code>logAverages()</code> will group frequency bands by octave and allows you to specify the size of the smallest octave to
  * use (in Hz) and also how many bands to split each octave into. So you might ask for the smallest octave to be 60 Hz and to
  * split each octave into two bands. The result is that the bandwidth of each average is different. One frequency is an octave
@@ -71,34 +72,39 @@ package com.rf17.soundify.receive.fft;
  * last octave will always span <code>sampleRate/4 - sampleRate/2</code>, which in the case of audio sampled at 44100 Hz is
  * 11025-22010 Hz. These logarithmically spaced averages are usually much more useful than the full spectrum or the linearly
  * spaced averages because they map more directly to how humans perceive sound.
- * <p>
+ * <p/>
  * <code>calcAvg()</code> allows you to specify the frequency band you want an average calculated for. You might ask for 60-500Hz
  * and this function will group together the bands from the full spectrum that fall into that range and average their amplitudes
  * for you.
- * <p>
+ * <p/>
  * If you don't want any averages calculated, then you can call <code>noAverages()</code>. This will not impact your ability to
  * use <code>calcAvg()</code>, it will merely prevent the object from calculating an average array every time you use
  * <code>forward()</code>.
- * <p>
+ * <p/>
  * <b>Inverse Transform</b>
- * <p>
+ * <p/>
  * FourierTransform also supports taking the inverse transform of a spectrum. This means that a frequency spectrum will be
  * transformed into a time domain signal and placed in a provided sample buffer. The length of the time domain signal will be
  * <code>timeSize()</code> long. The <code>set</code> and <code>scale</code> functions allow you the ability to shape the spectrum
  * already stored in the object before taking the inverse transform. You might use these to filter frequencies in a spectrum or
  * modify it in some other way.
- * 
+ *
  * @author Damien Di Fede
- * @see <a href="http://www.dspguide.com/ch8.htm">The Discrete Fourier Transform</a> */
+ * @see <a href="http://www.dspguide.com/ch8.htm">The Discrete Fourier Transform</a>
+ */
 public abstract class FourierTransform {
-    /** A constant indicating no window should be used on sample buffers. */
+    /**
+     * A constant indicating no window should be used on sample buffers.
+     */
     public static final int NONE = 0;
-    /** A constant indicating a Hamming window should be used on sample buffers. */
+    /**
+     * A constant indicating a Hamming window should be used on sample buffers.
+     */
     public static final int HAMMING = 1;
     protected static final int LINAVG = 2;
     protected static final int LOGAVG = 3;
     protected static final int NOAVG = 4;
-    protected static final float TWO_PI = (float)(2 * Math.PI);
+    protected static final float TWO_PI = (float) (2 * Math.PI);
     protected int timeSize;
     protected int sampleRate;
     protected float bandWidth;
@@ -110,35 +116,37 @@ public abstract class FourierTransform {
     protected int whichAverage;
     protected int octaves;
     protected int avgPerOctave;
- 
-    /** Construct a FourierTransform that will analyze sample buffers that are <code>ts</code> samples long and contain samples with
+
+    /**
+     * Construct a FourierTransform that will analyze sample buffers that are <code>ts</code> samples long and contain samples with
      * a <code>sr</code> sample rate.
-     * 
+     *
      * @param ts the length of the buffers that will be analyzed
-     * @param sr the sample rate of the samples that will be analyzed */
-    FourierTransform (int ts, float sr) {
+     * @param sr the sample rate of the samples that will be analyzed
+     */
+    FourierTransform(int ts, float sr) {
         timeSize = ts;
-        sampleRate = (int)sr;
-        bandWidth = (2f / timeSize) * ((float)sampleRate / 2f);
+        sampleRate = (int) sr;
+        bandWidth = (2f / timeSize) * ((float) sampleRate / 2f);
         noAverages();
         allocateArrays();
         whichWindow = NONE;
     }
- 
+
     // allocating real, imag, and spectrum are the responsibility of derived
     // classes
     // because the size of the arrays will depend on the implementation being used
     // this enforces that responsibility
-    protected abstract void allocateArrays ();
+    protected abstract void allocateArrays();
 
     // fill the spectrum array with the amps of the data in real and imag
     // used so that this class can handle creating the average array
     // and also do spectrum shaping if necessary
-    protected void fillSpectrum () {
+    protected void fillSpectrum() {
         for (int i = 0; i < spectrum.length; i++) {
-            spectrum[i] = (float)Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
+            spectrum[i] = (float) Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
         }
- 
+
         if (whichAverage == LINAVG) {
             int avgWidth = spectrum.length / averages.length;
             for (int i = 0; i < averages.length; i++) {
@@ -161,9 +169,9 @@ public abstract class FourierTransform {
                 if (i == 0) {
                     lowFreq = 0;
                 } else {
-                    lowFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - i);
+                    lowFreq = (sampleRate / 2) / (float) Math.pow(2, octaves - i);
                 }
-                hiFreq = (sampleRate / 2) / (float)Math.pow(2, octaves - i - 1);
+                hiFreq = (sampleRate / 2) / (float) Math.pow(2, octaves - i - 1);
                 freqStep = (hiFreq - lowFreq) / avgPerOctave;
                 float f = lowFreq;
                 for (int j = 0; j < avgPerOctave; j++) {
@@ -174,74 +182,86 @@ public abstract class FourierTransform {
             }
         }
     }
- 
-    /** Sets the object to not compute averages. */
-    public void noAverages () {
+
+    /**
+     * Sets the object to not compute averages.
+     */
+    public void noAverages() {
         averages = new float[0];
         whichAverage = NOAVG;
     }
 
-    protected void doWindow (float[] samples) {
+    protected void doWindow(float[] samples) {
         switch (whichWindow) {
-        case HAMMING:
-            hamming(samples);
-            break;
+            case HAMMING:
+                hamming(samples);
+                break;
         }
     }
- 
+
     // windows the data in samples with a Hamming window
-    protected void hamming (float[] samples) {
+    protected void hamming(float[] samples) {
         for (int i = 0; i < samples.length; i++) {
             samples[i] *= (0.54f - 0.46f * Math.cos(TWO_PI * i / (samples.length - 1)));
         }
     }
 
-    /** Returns the amplitude of the requested frequency band.
-     * 
+    /**
+     * Returns the amplitude of the requested frequency band.
+     *
      * @param i the index of a frequency band
-     * @return the amplitude of the requested frequency band */
-    public float getBand (int i) {
+     * @return the amplitude of the requested frequency band
+     */
+    public float getBand(int i) {
         if (i < 0) i = 0;
         if (i > spectrum.length - 1) i = spectrum.length - 1;
         return spectrum[i];
     }
- 
-    /** Returns the width of each frequency band in the spectrum (in Hz). It should be noted that the bandwidth of the first and
+
+    /**
+     * Returns the width of each frequency band in the spectrum (in Hz). It should be noted that the bandwidth of the first and
      * last frequency bands is half as large as the value returned by this function.
-     * 
-     * @return the width of each frequency band in Hz. */
-    public float getBandWidth () {
+     *
+     * @return the width of each frequency band in Hz.
+     */
+    public float getBandWidth() {
         return bandWidth;
     }
 
-    /** Returns the index of the frequency band that contains the requested frequency.
-     * 
+    /**
+     * Returns the index of the frequency band that contains the requested frequency.
+     *
      * @param freq the frequency you want the index for (in Hz)
-     * @return the index of the frequency band that contains freq */
-    public int freqToIndex (float freq) {
+     * @return the index of the frequency band that contains freq
+     */
+    public int freqToIndex(float freq) {
         // special case: freq is lower than the bandwidth of spectrum[0]
         if (freq < getBandWidth() / 2) return 0;
         // special case: freq is within the bandwidth of spectrum[spectrum.length - 1]
         if (freq > sampleRate / 2 - getBandWidth() / 2) return spectrum.length - 1;
         // all other cases
-        float fraction = freq / (float)sampleRate;
+        float fraction = freq / (float) sampleRate;
         return Math.round(timeSize * fraction);
     }
 
-    /** Gets the amplitude of the requested frequency in the spectrum.
-     * 
+    /**
+     * Gets the amplitude of the requested frequency in the spectrum.
+     *
      * @param freq the frequency in Hz
-     * @return the amplitude of the frequency in the spectrum */
-    public float getFreq (float freq) {
+     * @return the amplitude of the frequency in the spectrum
+     */
+    public float getFreq(float freq) {
         return getBand(freqToIndex(freq));
     }
 
-    /** Calculate the average amplitude of the frequency band bounded by <code>lowFreq</code> and <code>hiFreq</code>, inclusive.
-     * 
+    /**
+     * Calculate the average amplitude of the frequency band bounded by <code>lowFreq</code> and <code>hiFreq</code>, inclusive.
+     *
      * @param lowFreq the lower bound of the band
-     * @param hiFreq the upper bound of the band
-     * @return the average of all spectrum values within the bounds */
-    public float calcAvg (float lowFreq, float hiFreq) {
+     * @param hiFreq  the upper bound of the band
+     * @return the average of all spectrum values within the bounds
+     */
+    public float calcAvg(float lowFreq, float hiFreq) {
         int lowBound = freqToIndex(lowFreq);
         int hiBound = freqToIndex(hiFreq);
         float avg = 0;
@@ -251,10 +271,12 @@ public abstract class FourierTransform {
         avg /= (hiBound - lowBound + 1);
         return avg;
     }
- 
-    /** Performs a forward transform on <code>buffer</code>.
-     * 
-     * @param buffer the buffer to analyze */
-    public abstract void forward (float[] buffer);
+
+    /**
+     * Performs a forward transform on <code>buffer</code>.
+     *
+     * @param buffer the buffer to analyze
+     */
+    public abstract void forward(float[] buffer);
 
 }

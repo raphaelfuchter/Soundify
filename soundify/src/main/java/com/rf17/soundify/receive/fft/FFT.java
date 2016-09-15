@@ -10,34 +10,38 @@
  * You should have received a copy of the GNU Library General Public License along with this program; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
- 
+
 package com.rf17.soundify.receive.fft;
- 
-/** FFT stands for Fast Fourier Transform. It is an efficient way to calculate the Complex Discrete Fourier Transform. There is not
+
+/**
+ * FFT stands for Fast Fourier Transform. It is an efficient way to calculate the Complex Discrete Fourier Transform. There is not
  * much to say about this class other than the fact that when you want to analyze the spectrum of an audio buffer you will almost
  * always use this class. One restriction of this class is that the audio buffers you want to analyze must have a length that is a
  * power of two. If you try to construct an FFT with a <code>timeSize</code> that is not a power of two, an
  * IllegalArgumentException will be thrown.
- * 
+ *
+ * @author Damien Di Fede
  * @see FourierTransform
  * @see <a href="http://www.dspguide.com/ch12.htm">The Fast Fourier Transform</a>
- * 
- * @author Damien Di Fede */
+ */
 public class FFT extends FourierTransform {
-    /** Constructs an FFT that will accept sample buffers that are <code>timeSize</code> long and have been recorded with a sample
+    /**
+     * Constructs an FFT that will accept sample buffers that are <code>timeSize</code> long and have been recorded with a sample
      * rate of <code>sampleRate</code>. <code>timeSize</code> <em>must</em> be a power of two. This will throw an exception if it
      * is not.
-     * 
-     * @param timeSize the length of the sample buffers you will be analyzing
-     * @param sampleRate the sample rate of the audio you will be analyzing */
-    public FFT (int timeSize, float sampleRate) {
+     *
+     * @param timeSize   the length of the sample buffers you will be analyzing
+     * @param sampleRate the sample rate of the audio you will be analyzing
+     */
+    public FFT(int timeSize, float sampleRate) {
         super(timeSize, sampleRate);
-        if ((timeSize & (timeSize - 1)) != 0) throw new IllegalArgumentException("FFT: timeSize must be a power of two.");
+        if ((timeSize & (timeSize - 1)) != 0)
+            throw new IllegalArgumentException("FFT: timeSize must be a power of two.");
         buildReverseTable();
         buildTrigTables();
     }
- 
-    protected void allocateArrays () {
+
+    protected void allocateArrays() {
         spectrum = new float[timeSize / 2 + 1];
         real = new float[timeSize];
         imag = new float[timeSize];
@@ -45,7 +49,7 @@ public class FFT extends FourierTransform {
 
     // performs an in-place fft on the data in the real and imag arrays
     // bit reversing is not necessary as the data will already be bit reversed
-    private void fft () {
+    private void fft() {
         for (int halfSize = 1; halfSize < real.length; halfSize *= 2) {
             // float k = -(float)Math.PI/halfSize;
             // phase shift step
@@ -73,8 +77,8 @@ public class FFT extends FourierTransform {
             }
         }
     }
- 
-    public void forward (float[] buffer) {
+
+    public void forward(float[] buffer) {
         if (buffer.length != timeSize) {
             throw new IllegalArgumentException("FFT.forward: The length of the passed sample buffer must be equal to timeSize().");
         }
@@ -88,21 +92,21 @@ public class FFT extends FourierTransform {
     }
 
     private int[] reverse;
- 
-    private void buildReverseTable () {
+
+    private void buildReverseTable() {
         int N = timeSize;
         reverse = new int[N];
- 
+
         // set up the bit reversing table
         reverse[0] = 0;
         for (int limit = 1, bit = N / 2; limit < N; limit <<= 1, bit >>= 1)
             for (int i = 0; i < limit; i++)
                 reverse[i + limit] = reverse[i] + bit;
     }
- 
+
     // copies the values in the samples array into the real array
     // in bit reversed order. the imag array is filled with zeros.
-    private void bitReverseSamples (float[] samples) {
+    private void bitReverseSamples(float[] samples) {
         for (int i = 0; i < samples.length; i++) {
             real[i] = samples[reverse[i]];
             imag[i] = 0.0f;
@@ -110,25 +114,25 @@ public class FFT extends FourierTransform {
     }
 
     // lookup tables
- 
+
     private float[] sinlookup;
     private float[] coslookup;
- 
-    private float sin (int i) {
+
+    private float sin(int i) {
         return sinlookup[i];
     }
- 
-    private float cos (int i) {
+
+    private float cos(int i) {
         return coslookup[i];
     }
- 
-    private void buildTrigTables () {
+
+    private void buildTrigTables() {
         int N = timeSize;
         sinlookup = new float[N];
         coslookup = new float[N];
         for (int i = 0; i < N; i++) {
-            sinlookup[i] = (float)Math.sin(-(float)Math.PI / i);
-            coslookup[i] = (float)Math.cos(-(float)Math.PI / i);
+            sinlookup[i] = (float) Math.sin(-(float) Math.PI / i);
+            coslookup[i] = (float) Math.cos(-(float) Math.PI / i);
         }
     }
 

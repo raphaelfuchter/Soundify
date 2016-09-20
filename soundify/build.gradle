@@ -1,4 +1,40 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.rf177.soundify' // Change this to match your package name
+version = '0.0.1' // Change this to match your version number
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+artifacts {
+    //archives generateJavaDocsJar
+    archives generateSourcesJar
+}
+
+bintray {
+    user = 'rf17'
+    key = 'c7a4f8f5febf14bbcfba43320b64208a90528ad6'
+    pkg {
+        repo = 'Soundify'
+        name = 'com.github.rf17.soundify'
+
+        version {
+            name = '0.0.1-teste'
+            desc = 'My test upload'
+            //released  = '09/20/2016'
+            vcsTag = '0.0.1'
+        }
+
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/hathibelagal/LibraryTutorial.git'
+        websiteUrl = 'https://github.com/hathibelagal/LibraryTutorial'
+    }
+    configurations = ['archives']
+}
 
 android {
     compileSdkVersion 24

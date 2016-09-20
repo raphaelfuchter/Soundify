@@ -3,13 +3,13 @@ package com.rf17.soundify.receive;
 import com.rf17.soundify.Config;
 import com.rf17.soundify.receive.fft.FFT;
 
-public class ReceiverUtils {
+class ReceiverUtils {
 
-    public static short calcData(short freq){
+    static short calcData(short freq){
         return (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
     }
 
-    public static short calcFreq(float[] floatData) {
+    static short calcFreq(float[] floatData) {
         int size = floatData.length;
         int fftSize = calcFftSize(size);
         FFT fft = new FFT(fftSize, Config.SAMPLE_RATE);

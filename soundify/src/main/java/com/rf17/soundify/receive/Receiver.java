@@ -31,10 +31,6 @@ public class Receiver {
         return sReceiver;
     }
 
-    public Receiver() {
-        initThread();
-    }
-
     private void initThread() {
         thread = new Thread() {
             @Override
@@ -62,9 +58,12 @@ public class Receiver {
                 list = new ArrayList<>();
                 return Config.NONSENSE_DATA;
             case Config.STOP_COMMAND:
-                byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
-                if(retByte != null) {
-                    Soundify.soundifyListener.OnReceiveData(retByte);
+                if(!list.isEmpty()) {
+                    byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
+                    if (retByte != null) {
+                        Soundify.soundifyListener.OnReceiveData(retByte);
+                    }
+                    list = new ArrayList<>();
                 }
                 return Config.NONSENSE_DATA;
             default:

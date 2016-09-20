@@ -30,8 +30,8 @@ bintray {
         }
 
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/hathibelagal/LibraryTutorial.git'
-        websiteUrl = 'https://github.com/hathibelagal/LibraryTutorial'
+        vcsUrl = 'https://github.com/rf177/soundify.git'
+        websiteUrl = 'https://github.com/rf177/soundify'
     }
     configurations = ['archives']
 }

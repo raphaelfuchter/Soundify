@@ -1,1 +1,1 @@
-include ':app', ':soundify'
+include ':app', ':library'

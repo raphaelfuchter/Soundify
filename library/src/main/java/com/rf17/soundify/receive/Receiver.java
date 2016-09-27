@@ -16,14 +16,33 @@ import java.util.List;
 
 public class Receiver {
 
+    /**
+     * This variable contains the audioRecord
+     */
     private AudioRecord audioRecord;
+
+    /**
+     *
+     */
     private Thread thread;
+
+    /**
+     *
+     */
     private boolean threadRunning = true;
+
+    /**
+     *
+     */
     private static Receiver sReceiver;
 
     private List<Byte> list = new ArrayList<>();
     private short[] recordedData = new short[Config.TIME_BAND];
 
+    /**
+     * This function is used to initialize the soundify receiver instance.
+     * @return Receiver Soundify Receiver
+     */
     public static Receiver getReceiver() {
         if (sReceiver == null) {
             sReceiver = new Receiver();
@@ -84,6 +103,9 @@ public class Receiver {
         }
         if(!threadRunning){
             threadRunning = true;
+        }
+        if(thread == null){
+            initThread();
         }
         if (thread.getState() == Thread.State.NEW) {
             thread.start();

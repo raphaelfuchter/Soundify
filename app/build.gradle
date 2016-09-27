@@ -34,5 +34,5 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.0.0'
     compile 'com.android.support:support-v4:24.2.1'
 
-    compile project(":soundify")
+    compile project(':library')
 }

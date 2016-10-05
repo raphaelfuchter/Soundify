@@ -84,7 +84,7 @@ public class Soundify extends BytesUtils {
          * @param msg  Error message.
          * @since 0.0.1
          */
-        void OnReceiveError(int code, String msg);
+        //void OnReceiveError(int code, String msg);
     }
 
     /**

@@ -1,17 +1,14 @@
 package com.rf17.soundify.app.activity;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.rf17.soundify.Soundify;
 import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
@@ -52,32 +49,17 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView.Adapter mAdapter = new MyRecyclerViewAdapter(messages);
             mRecyclerView.setAdapter(mAdapter);
 
-            DebugUtils.log("mAdapter: "+mAdapter);
-
             recyclerViewAdapter = (MyRecyclerViewAdapter) mAdapter;
 
             soundify = new Soundify(this);
             soundify.startListening();
-            soundify.setSoundifyListener(new Soundify.SoundifyListener() {
-                @Override
-                public void OnReceiveData(byte[] data) {
-                    String stringData = Soundify.bytesToString(data);
-                    Message message = new Message(stringData, sdf.format(new Date()));
-                    recyclerViewAdapter.addItem(message, 0);
-                }
-
-                @Override
-                public void OnReceiveError(int code, String msg) {
-                    Toast.makeText(MainActivity.this, "Error! Code: " + code + " Exception: " + msg, Toast.LENGTH_SHORT).show();
-                }
+            soundify.setSoundifyListener((data) -> {
+                String stringData = Soundify.bytesToString(data);
+                Message message = new Message(stringData, sdf.format(new Date()));
+                recyclerViewAdapter.addItem(message, 0);
             });
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showDialog();
-                }
-            });
+            fab.setOnClickListener((view) -> showDialog());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,15 +75,12 @@ public class MainActivity extends AppCompatActivity {
                 .title(R.string.message)
                 .customView(R.layout.dialog_send_customview, true)
                 .positiveText(R.string.send)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        try {
-                            DebugUtils.log("msg: "+messageSend.getText().toString());
-                            soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+                .onPositive((materialDialog, dialogAction) -> {
+                    try {
+                        DebugUtils.log("msg: "+messageSend.getText().toString());
+                        soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 })
                 .build();
@@ -122,15 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
-
-        DebugUtils.log("recyclerViewAdapter: "+recyclerViewAdapter);
-
-        recyclerViewAdapter.setOnItemClickListener(new MyRecyclerViewAdapter.MyClickListener() {
-            @Override
-            public void onItemClick(int position, View v) {
-                recyclerViewAdapter.deleteItem(position);
-            }
-        });
+        recyclerViewAdapter.setOnItemClickListener((position, view) -> recyclerViewAdapter.deleteItem(position));
     }
 
     @Override

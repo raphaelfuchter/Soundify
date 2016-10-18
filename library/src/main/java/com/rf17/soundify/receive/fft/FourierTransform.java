@@ -96,26 +96,26 @@ public abstract class FourierTransform {
     /**
      * A constant indicating no window should be used on sample buffers.
      */
-    public static final int NONE = 0;
+    private static final int NONE = 0;
     /**
      * A constant indicating a Hamming window should be used on sample buffers.
      */
-    public static final int HAMMING = 1;
-    protected static final int LINAVG = 2;
-    protected static final int LOGAVG = 3;
-    protected static final int NOAVG = 4;
-    protected static final float TWO_PI = (float) (2 * Math.PI);
-    protected int timeSize;
-    protected int sampleRate;
-    protected float bandWidth;
-    protected int whichWindow;
-    protected float[] real;
-    protected float[] imag;
-    protected float[] spectrum;
-    protected float[] averages;
-    protected int whichAverage;
-    protected int octaves;
-    protected int avgPerOctave;
+    private static final int HAMMING = 1;
+    private static final int LINAVG = 2;
+    private static final int LOGAVG = 3;
+    private static final int NOAVG = 4;
+    private static final float TWO_PI = (float) (2 * Math.PI);
+    int timeSize;
+    private int sampleRate;
+    private float bandWidth;
+    private int whichWindow;
+    float[] real;
+    float[] imag;
+    float[] spectrum;
+    private float[] averages;
+    private int whichAverage;
+    int octaves;
+    int avgPerOctave;
 
     /**
      * Construct a FourierTransform that will analyze sample buffers that are <code>ts</code> samples long and contain samples with
@@ -142,7 +142,7 @@ public abstract class FourierTransform {
     // fill the spectrum array with the amps of the data in real and imag
     // used so that this class can handle creating the average array
     // and also do spectrum shaping if necessary
-    protected void fillSpectrum() {
+    void fillSpectrum() {
         for (int i = 0; i < spectrum.length; i++) {
             spectrum[i] = (float) Math.sqrt(real[i] * real[i] + imag[i] * imag[i]);
         }
@@ -186,12 +186,12 @@ public abstract class FourierTransform {
     /**
      * Sets the object to not compute averages.
      */
-    public void noAverages() {
+    private void noAverages() {
         averages = new float[0];
         whichAverage = NOAVG;
     }
 
-    protected void doWindow(float[] samples) {
+    void doWindow(float[] samples) {
         switch (whichWindow) {
             case HAMMING:
                 hamming(samples);
@@ -200,7 +200,7 @@ public abstract class FourierTransform {
     }
 
     // windows the data in samples with a Hamming window
-    protected void hamming(float[] samples) {
+    private void hamming(float[] samples) {
         for (int i = 0; i < samples.length; i++) {
             samples[i] *= (0.54f - 0.46f * Math.cos(TWO_PI * i / (samples.length - 1)));
         }
@@ -212,7 +212,7 @@ public abstract class FourierTransform {
      * @param i the index of a frequency band
      * @return the amplitude of the requested frequency band
      */
-    public float getBand(int i) {
+    private float getBand(int i) {
         if (i < 0) i = 0;
         if (i > spectrum.length - 1) i = spectrum.length - 1;
         return spectrum[i];
@@ -224,7 +224,7 @@ public abstract class FourierTransform {
      *
      * @return the width of each frequency band in Hz.
      */
-    public float getBandWidth() {
+    private float getBandWidth() {
         return bandWidth;
     }
 
@@ -234,7 +234,7 @@ public abstract class FourierTransform {
      * @param freq the frequency you want the index for (in Hz)
      * @return the index of the frequency band that contains freq
      */
-    public int freqToIndex(float freq) {
+    private int freqToIndex(float freq) {
         // special case: freq is lower than the bandwidth of spectrum[0]
         if (freq < getBandWidth() / 2) return 0;
         // special case: freq is within the bandwidth of spectrum[spectrum.length - 1]
@@ -261,7 +261,7 @@ public abstract class FourierTransform {
      * @param hiFreq  the upper bound of the band
      * @return the average of all spectrum values within the bounds
      */
-    public float calcAvg(float lowFreq, float hiFreq) {
+    private float calcAvg(float lowFreq, float hiFreq) {
         int lowBound = freqToIndex(lowFreq);
         int hiBound = freqToIndex(hiFreq);
         float avg = 0;

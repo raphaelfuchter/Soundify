@@ -6,6 +6,7 @@ import android.media.AudioTrack;
 import android.media.MediaRecorder;
 
 import com.rf17.soundify.Config;
+import com.rf17.soundify.EncoderDecoder;
 import com.rf17.soundify.Soundify;
 import com.rf17.soundify.exception.SoundifyException;
 import com.rf17.soundify.utils.DebugUtils;
@@ -69,9 +70,7 @@ public class Receiver {
         float[] floatData = ListUtils.convertArrayShortToArrayFloat(recordedData);
         short freq = ReceiverUtils.calcFreq(floatData);
         short data = ReceiverUtils.calcData(freq);
-
         DebugUtils.log("Freq: " + freq + "  |  data: " + data);
-
         switch (data) {
             case Config.START_COMMAND:
                 list = new ArrayList<>();
@@ -81,6 +80,13 @@ public class Receiver {
                     byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
                     if (retByte != null) {
                         Soundify.soundifyListener.OnReceiveData(retByte);
+                        /*EncoderDecoder encoder = new EncoderDecoder();
+                        try{
+                            retByte = encoder.decodeData(retByte, 4);
+                            Soundify.soundifyListener.OnReceiveData(retByte);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }*/
                     }
                     list = new ArrayList<>();
                 }

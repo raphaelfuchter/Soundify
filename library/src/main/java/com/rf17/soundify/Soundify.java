@@ -58,6 +58,12 @@ public class Soundify extends BytesUtils {
      * @since 0.0.1
      */
     public void send(byte[] data) {
+        /*EncoderDecoder encoder = new EncoderDecoder();
+        try{
+            data = encoder.encodeData(data, 4);
+        } catch (EncoderDecoder.DataTooLargeException e) {
+            e.printStackTrace();
+        }*/
         Sender.getSender().send(activity, data);
     }
 

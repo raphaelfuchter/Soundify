@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Soundify</string>
 
-    <string name="message">Mensagem</string>
+    <string name="type_a_message">Digite uma mensagem...</string>
     <string name="send">Enviar</string>
 
 </resources>

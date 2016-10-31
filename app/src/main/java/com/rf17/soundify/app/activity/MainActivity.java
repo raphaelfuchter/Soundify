@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.rf17.soundify.Soundify;
 import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
 import com.rf17.soundify.app.model.Message;
@@ -23,14 +22,13 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText messageSend;
+    private Soundify soundify;
 
+    private EditText messageSend;
     private MyRecyclerViewAdapter recyclerViewAdapter;
 
     private ArrayList<Message> messages = new ArrayList<>();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-
-    private Soundify soundify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+            messageSend = (EditText) findViewById(R.id.etx_send);
 
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -59,35 +58,27 @@ public class MainActivity extends AppCompatActivity {
                 recyclerViewAdapter.addItem(message, 0);
             });
 
-            fab.setOnClickListener((view) -> showDialog());
+            fab.setOnClickListener((view) -> sendMessage());
+
+            recyclerViewAdapter.setOnItemClickListener((position, view) -> recyclerViewAdapter.deleteItem(position));
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      *
      */
-    public void showDialog() {
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .title(R.string.message)
-                .customView(R.layout.dialog_send_customview, true)
-                .positiveText(R.string.send)
-                .onPositive((materialDialog, dialogAction) -> {
-                    try {
-                        DebugUtils.log("msg: "+messageSend.getText().toString());
-                        soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                })
-                .build();
-        if(dialog.getCustomView() != null) {
-            messageSend = (EditText) dialog.getCustomView().findViewById(R.id.etx_send);
+    public void sendMessage() {
+        try{
+            DebugUtils.log("msg: "+messageSend.getText().toString());
+            soundify.send(Soundify.stringToBytes(messageSend.getText().toString()));
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        dialog.show();
     }
 
     @Override
@@ -98,10 +89,9 @@ public class MainActivity extends AppCompatActivity {
                 soundify.startListening();
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
-        recyclerViewAdapter.setOnItemClickListener((position, view) -> recyclerViewAdapter.deleteItem(position));
     }
 
     @Override
@@ -111,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             soundify.stopListening();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -123,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             soundify.stopListening();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             soundify.stopListening();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Erro: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

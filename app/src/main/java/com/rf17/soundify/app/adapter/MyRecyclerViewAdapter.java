@@ -10,19 +10,20 @@ import com.rf17.soundify.app.model.Message;
 import com.rf17.soundifyapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.DataObjectHolder> {
-    private ArrayList<Message> mDataset;
+    private List<Message> mDataset;
     private static MyClickListener myClickListener;
 
     static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView label;
-        TextView dateTime;
+        //TextView dateTime;
 
         DataObjectHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.textView);
-            dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            label = (TextView) itemView.findViewById(R.id.txtMessage);
+            //dateTime = (TextView) itemView.findViewById(R.id.textView2);
             itemView.setOnClickListener(this);
         }
 
@@ -42,19 +43,27 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_row, parent, false);
-        return new DataObjectHolder(view);
+        View view;
+        switch (viewType) {
+            case Message.MYMSG_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_right, parent, false);
+                return new DataObjectHolder(view);
+            case Message.RECMSG_TYPE:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_left, parent, false);
+                return new DataObjectHolder(view);
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getmText1());
-        holder.dateTime.setText(mDataset.get(position).getmText2());
+        holder.label.setText(mDataset.get(position).getMsg());
+        //holder.dateTime.setText(mDataset.get(position).getmText2());
     }
 
-    public void addItem(Message dataObj, int index) {
-        mDataset.add(index, dataObj);
-        notifyItemInserted(index);
+    public void addItem(Message dataObj) {
+        mDataset.add(getItemCount(), dataObj);
+        notifyItemInserted(getItemCount());
     }
 
     public void deleteItem(int index) {

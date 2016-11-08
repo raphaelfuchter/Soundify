@@ -6,24 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rf17.soundify.app.model.Message;
+import com.rf17.soundify.utils.DebugUtils;
 import com.rf17.soundifyapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.DataObjectHolder> {
-    private List<Message> mDataset;
+    private List<String> mDataset;
     private static MyClickListener myClickListener;
+
+    private char typeMsg;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 
     static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView label;
-        //TextView dateTime;
+        TextView dateTime;
 
         DataObjectHolder(View itemView) {
             super(itemView);
             label = (TextView) itemView.findViewById(R.id.txtMessage);
-            //dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            dateTime = (TextView) itemView.findViewById(R.id.txtDate);
             itemView.setOnClickListener(this);
         }
 
@@ -37,18 +44,20 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         myClickListener = clickListener;
     }
 
-    public MyRecyclerViewAdapter(ArrayList<Message> myDataset) {
+    public MyRecyclerViewAdapter(ArrayList<String> myDataset) {
         mDataset = myDataset;
     }
 
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        switch (viewType) {
-            case Message.MYMSG_TYPE:
+        switch (typeMsg) {
+            case 'R':
+                DebugUtils.log("R");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_right, parent, false);
                 return new DataObjectHolder(view);
-            case Message.RECMSG_TYPE:
+            case 'L':
+                DebugUtils.log("L");
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_left, parent, false);
                 return new DataObjectHolder(view);
         }
@@ -57,12 +66,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getMsg());
-        //holder.dateTime.setText(mDataset.get(position).getmText2());
+        holder.label.setText(mDataset.get(position));
+        holder.dateTime.setText(sdf.format(new Date()));
     }
 
-    public void addItem(Message dataObj) {
-        mDataset.add(getItemCount(), dataObj);
+    public void addItem(String msg, char type) {
+        typeMsg = type;
+        mDataset.add(getItemCount(), msg);
         notifyItemInserted(getItemCount());
     }
 

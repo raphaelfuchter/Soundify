@@ -69,7 +69,7 @@ public class Receiver {
         float[] floatData = ListUtils.convertArrayShortToArrayFloat(recordedData);
         short freq = ReceiverUtils.calcFreq(floatData);
         short data = ReceiverUtils.calcData(freq);
-        DebugUtils.log("Freq: " + freq + "  |  data: " + data);
+        //DebugUtils.log("Freq: " + freq + "  |  data: " + data);
         switch (data) {
             case Config.START_COMMAND:
                 list = new ArrayList<>();
@@ -77,6 +77,9 @@ public class Receiver {
             case Config.STOP_COMMAND:
                 if(!list.isEmpty()) {
                     byte[] retByte = ListUtils.convertListBytesToArrayBytes(list);
+
+                    DebugUtils.log("retByte: "+retByte);
+
                     if (retByte != null) {
                         Soundify.soundifyListener.OnReceiveData(retByte);
                     }

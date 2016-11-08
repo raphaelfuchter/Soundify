@@ -22,7 +22,20 @@
             android:paddingStart="1dp"
             android:text="@string/app_name"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_below="@id/txtMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingEnd="12dp"
+            android:paddingStart="1dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
 
 
     </RelativeLayout>

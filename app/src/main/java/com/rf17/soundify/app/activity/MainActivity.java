@@ -10,7 +10,6 @@ import android.widget.EditText;
 
 import com.rf17.soundify.Soundify;
 import com.rf17.soundify.app.adapter.MyRecyclerViewAdapter;
-import com.rf17.soundify.app.model.Message;
 import com.rf17.soundify.app.utils.AndroidUtils;
 import com.rf17.soundifyapp.R;
 
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText messageSend;
     private MyRecyclerViewAdapter recyclerViewAdapter;
 
-    private ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<String> messages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
             soundify.startListening();
             soundify.setSoundifyListener((data) -> {
                 String stringData = Soundify.bytesToString(data);
-                Message message = new Message(stringData, 1);
-                recyclerViewAdapter.addItem(message);
+                recyclerViewAdapter.addItem(stringData, 'L');
             });
 
             fab.setOnClickListener((view) -> {
@@ -73,14 +71,10 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage() {
         try{
             String msg = messageSend.getText().toString();
-
-            soundify.stopListening();
-            soundify.send(Soundify.stringToBytes(msg));
-            soundify.startListening();
-
-            Message message = new Message(msg, 0);
-            recyclerViewAdapter.addItem(message);
-
+            if (!msg.isEmpty()) {
+                soundify.send(Soundify.stringToBytes(msg));
+                recyclerViewAdapter.addItem(msg, 'R');
+            }
         }catch (Exception e){
             AndroidUtils.showToast(this, e);
         }

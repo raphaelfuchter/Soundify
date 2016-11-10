@@ -1,5 +1,6 @@
 # Soundify - Data transmission via sound waves
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Soundify-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/4595)
 
 Soundify Library tries to offer to you the data transmission via sound waves. This library specifically makes the transformation and transmission of certain information into sound waves in the application that it is implemented and also makes the receipt of the same information transmitted. 
 It uses the same concept as [Chirp.io](https://www.chirp.io/) technology.

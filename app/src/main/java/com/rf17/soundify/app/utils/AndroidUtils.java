@@ -34,5 +34,4 @@ public class AndroidUtils {
         e.printStackTrace();
         Toast.makeText(activity, "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
     }
-
 }

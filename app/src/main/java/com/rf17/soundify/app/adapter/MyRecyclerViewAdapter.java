@@ -28,6 +28,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             itemView.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View v) {
             myClickListener.onItemClick(getAdapterPosition(), v);

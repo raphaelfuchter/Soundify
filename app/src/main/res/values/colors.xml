@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00695C</color>
-    <color name="colorPrimaryDark">#004D40</color>
-    <color name="colorAccent">#00695C</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="card_blue">#1565C0</color>
+    <color name="card_green">#00695C</color>
+    <color name="card_gray">#37474F</color>
+    <color name="card_red">#C62828</color>
+    <color name="card_orange">#EF6C00</color>
+    <color name="card_purple">#4527A0</color>
+    <color name="card_brown">#4E342E</color>
+
 </resources>

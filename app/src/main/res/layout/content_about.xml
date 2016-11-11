@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.rf17.soundify.app.activity.AboutActivity"
+    tools:showIn="@layout/activity_about">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" >
+
+        <!-- Card Desenvolvedor -->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/about_developer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardCornerRadius="2dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true">
+
+            <!-- Foto Desenvolvedor -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:maxWidth="80dp"
+                android:maxHeight="80dp"
+                android:src="@drawable/about_raphael" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:orientation="vertical">
+
+                <!-- Nome Desenvolvedor -->
+                <TextView
+                    android:fontFamily="sans-serif-light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/developer_name"
+                    android:textSize="22sp" />
+
+                <!-- Desenvolvedor -->
+                <TextView
+                    android:fontFamily="sans-serif-thin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/developer"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Card GitHub -->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/about_github"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/card_gray"
+            card_view:cardCornerRadius="2dp"
+            android:layout_below="@+id/about_developer"
+            android:layout_marginTop="10dp">
+
+            <!-- Icone GitHub -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_device_hub" />
+
+            <!-- Descricao GitHub -->
+            <TextView
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/github"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="100dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Card Android Arsenal -->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/about_androidarsenal"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/card_brown"
+            card_view:cardCornerRadius="2dp"
+            android:layout_below="@+id/about_github"
+            android:layout_marginTop="10dp">
+
+            <!-- Icone Android Arsenal -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_android" />
+
+            <!-- Descricao Android Arsenal -->
+            <TextView
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/android_arsenal"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="100dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <!-- Card Google Play -->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/about_googleplay"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardBackgroundColor="@color/card_green"
+            card_view:cardCornerRadius="2dp"
+            android:layout_below="@+id/about_androidarsenal"
+            android:layout_marginTop="10dp">
+
+            <!-- Icone Google Play -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:adjustViewBounds="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_play_arrow" />
+
+            <!-- Descricao Google Play -->
+            <TextView
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_googleplay"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="100dp" />
+
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

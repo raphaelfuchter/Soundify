@@ -16,8 +16,18 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.rf17.soundify.app.activity.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="com.rf17.soundify.app.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rf17.soundify.app.activity.MainActivity" />
         </activity>
     </application>
 

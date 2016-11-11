@@ -3,7 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.rf177.soundify' // Change this to match your package name
-version = '0.0.1' // Change this to match your version number
+version = '0.1.0' // Change this to match your version number
 
 task generateSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -23,10 +23,10 @@ bintray {
         name = 'com.github.rf17.soundify'
 
         version {
-            name = '0.0.1-teste'
-            desc = 'My test upload'
+            name = '0.1.0'
+            desc = 'Raphael'
             //released  = '09/20/2016'
-            vcsTag = '0.0.1'
+            vcsTag = '0.1.0'
         }
 
         licenses = ['Apache-2.0']

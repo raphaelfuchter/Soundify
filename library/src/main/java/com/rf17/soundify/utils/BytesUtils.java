@@ -37,51 +37,27 @@ public class BytesUtils {
     }
 
     public static long bytesToLong(byte[] bytes) {
-        return bytesToLong(bytes, 0);
-    }
-
-    public static long bytesToLong(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getLong(index);
+        return ByteBuffer.wrap(bytes).getLong(0);
     }
 
     public static double bytesToDouble(byte[] bytes) {
-        return bytesToDouble(bytes, 0);
-    }
-
-    public static double bytesToDouble(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getDouble(index);
+        return ByteBuffer.wrap(bytes).getDouble(0);
     }
 
     public static int bytesToInt(byte[] bytes) {
-        return bytesToInt(bytes, 0);
-    }
-
-    public static int bytesToInt(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getInt(index);
+        return ByteBuffer.wrap(bytes).getInt(0);
     }
 
     public static float bytesToFloat(byte[] bytes) {
-        return bytesToFloat(bytes, 0);
-    }
-
-    public static float bytesToFloat(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getFloat(index);
+        return ByteBuffer.wrap(bytes).getFloat(0);
     }
 
     public static short bytesToShort(byte[] bytes) {
-        return bytesToShort(bytes, 0);
-    }
-
-    public static short bytesToShort(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getShort(index);
+        return ByteBuffer.wrap(bytes).getShort(0);
     }
 
     public static char bytesToChar(byte[] bytes) {
-        return bytesToChar(bytes, 0);
-    }
-
-    public static char bytesToChar(byte[] bytes, int index) {
-        return ByteBuffer.wrap(bytes).getChar(index);
+        return ByteBuffer.wrap(bytes).getChar(0);
     }
 
 }

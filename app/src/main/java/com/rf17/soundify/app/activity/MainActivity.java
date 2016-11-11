@@ -1,7 +1,11 @@
 package com.rf17.soundify.app.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +18,10 @@ import com.rf17.soundify.app.model.Message;
 import com.rf17.soundify.app.utils.AndroidUtils;
 import com.rf17.soundifyapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private MyRecyclerViewAdapter recyclerViewAdapter;
 
     private ArrayList<Message> messages = new ArrayList<>();
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +54,18 @@ public class MainActivity extends AppCompatActivity {
 
             recyclerViewAdapter = (MyRecyclerViewAdapter) mAdapter;
 
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 200);
+            }
+
             soundify = new Soundify(this);
             soundify.startListening();
             soundify.setSoundifyListener((data) -> {
                 String stringData = Soundify.bytesToString(data);
-                Message message = new Message(stringData, 1);
-                recyclerViewAdapter.addItem(message);
+                if(stringData.length() < 50) {
+                    Message message = new Message(stringData, sdf.format(new Date()));
+                    recyclerViewAdapter.addItem(message);
+                }
             });
 
             fab.setOnClickListener((view) -> {
@@ -73,14 +88,8 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage() {
         try{
             String msg = messageSend.getText().toString();
-
-            soundify.stopListening();
-            soundify.send(Soundify.stringToBytes(msg));
-            soundify.startListening();
-
-            Message message = new Message(msg, 0);
-            recyclerViewAdapter.addItem(message);
-
+            byte[] bytes = Soundify.stringToBytes(msg);
+            soundify.send(bytes);
         }catch (Exception e){
             AndroidUtils.showToast(this, e);
         }

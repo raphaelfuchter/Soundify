@@ -101,12 +101,9 @@ public class Sender {
         generateAudioTrack();// Verifica se o audioTrack esta inicializado
 
         // Thread que vai tocar/executar as frequencias (para nao travar o app)
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mAudioTrack.play();// Começa a tocar
-                mAudioTrack.write(ListUtils.convertListShortToArrayShort(list), 0, list.size());// Vai sobrescrevendo para tocar a lista de frequencias
-            }
+        activity.runOnUiThread(() -> {
+            mAudioTrack.play();// Começa a tocar
+            mAudioTrack.write(ListUtils.convertListShortToArrayShort(list), 0, list.size());// Vai sobrescrevendo para tocar a lista de frequencias
         });
     }
 

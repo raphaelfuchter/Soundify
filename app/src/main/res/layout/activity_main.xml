@@ -28,12 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/app_bar"
-        android:background="@drawable/whats_app_background"
+        android:background="@drawable/chat_background"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        app:stackFromEnd ="true"
-        app:reverseLayout="true"
         android:scrollbars="vertical"/>
 
     <LinearLayout
@@ -65,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="3dp"
-            android:src="@drawable/ic_graphic_eq_white_48dp" />
+            android:src="@drawable/ic_graphic" />
 
     </LinearLayout>
 

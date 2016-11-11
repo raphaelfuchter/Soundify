@@ -5,10 +5,20 @@ import com.rf17.soundify.receive.fft.FFT;
 
 class ReceiverUtils {
 
+    /**
+     *
+     * @param freq freq
+     * @return shor
+     */
     static short calcData(short freq){
         return (short) ((freq - Config.BASE_FREQ + Config.FREQ_STEP / 2) / Config.FREQ_STEP);
     }
 
+    /**
+     *
+     * @param floatData float data
+     * @return short
+     */
     static short calcFreq(float[] floatData) {
         int size = floatData.length;
         int fftSize = calcFftSize(size);
@@ -26,6 +36,11 @@ class ReceiverUtils {
         return index;
     }
 
+    /**
+     *
+     * @param size size of fft
+     * @return int
+     */
     private static int calcFftSize(int size) {
         int count = 0;
         int i;

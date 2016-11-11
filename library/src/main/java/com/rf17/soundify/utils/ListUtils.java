@@ -20,6 +20,12 @@ public class ListUtils {
         return data;
     }
 
+    /**
+     * Convert List to Array
+     *
+     * @param list List of bytes to convert
+     * @return Array of bytes
+     */
     public static byte[] convertListBytesToArrayBytes(List<Byte> list){
         int size = list.size();
         byte[] data = new byte[size];
@@ -30,6 +36,12 @@ public class ListUtils {
         return data;
     }
 
+    /**
+     * Convert Array of short to Array of float
+     *
+     * @param recordedData Array of short
+     * @return Array of float
+     */
     public static float[] convertArrayShortToArrayFloat(short[] recordedData){
         int size = recordedData.length;
         float[] floatData = new float[size];

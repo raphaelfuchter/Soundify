@@ -50,6 +50,9 @@ public class Receiver {
         return sReceiver;
     }
 
+    /**
+     *
+     */
     private void initThread() {
         thread = new Thread() {
             @Override
@@ -65,6 +68,11 @@ public class Receiver {
         };
     }
 
+    /**
+     *
+     * @param recordedData recordedData
+     * @return short
+     */
     private short parseRecData(short[] recordedData) {
         float[] floatData = ListUtils.convertArrayShortToArrayFloat(recordedData);
         short freq = ReceiverUtils.calcFreq(floatData);
@@ -92,6 +100,10 @@ public class Receiver {
         }
     }
 
+    /**
+     *
+     * @throws SoundifyException
+     */
     public void inicializeReceiver() throws SoundifyException {
         if (audioRecord == null || audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
             audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, Config.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, Config.AUDIO_FORMAT, AudioTrack.getMinBufferSize(Config.SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) * 4);
@@ -114,6 +126,10 @@ public class Receiver {
         }
     }
 
+    /**
+     *
+     * @throws SoundifyException
+     */
     public void stopReceiver() throws SoundifyException {
         if (audioRecord != null && audioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
             audioRecord.stop();

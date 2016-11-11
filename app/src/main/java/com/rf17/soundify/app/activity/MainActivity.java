@@ -137,5 +137,4 @@ public class MainActivity extends AppCompatActivity {
             AndroidUtils.showToast(this, e);
         }
     }
-
 }

@@ -16,7 +16,7 @@
         <item name="android:textColorPrimary">@android:color/background_dark</item>
     </style>
 
-    <style name="myTheme" parent="android:Theme.Material.Light.NoActionBar" >
+    <style name="myTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>

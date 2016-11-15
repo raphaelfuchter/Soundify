@@ -3,15 +3,13 @@ package com.rf17.soundify.app.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.rf17.soundifyapp.R;
 
 public class AboutActivity extends AppCompatActivity {
-
-    private final String email = "raphael.fuchter@gmail.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +18,31 @@ public class AboutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener((view) -> {
-            Intent i = new Intent(Intent.ACTION_SENDTO);
-            i.setData(Uri.parse("mailto:"+email));
-            startActivity(Intent.createChooser(i, "Enviar email"));
-        });
-
         if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    public void onClickDeveloper(View view) {
+
+    }
+
+    public void onClickEmail(View view) {
+        Intent i = new Intent(Intent.ACTION_SENDTO);
+        i.setData(Uri.parse("mailto:raphael.fuchter@gmail.com"));
+        startActivity(Intent.createChooser(i, "Enviar email"));
+    }
+
+    public void onClickGitHub(View view) {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://github.com/RF177/Soundify"));
+        startActivity(intent);
+    }
+
+    public void onClickAndroidArsenal(View view) {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://android-arsenal.com/details/1/4595"));
+        startActivity(intent);
     }
 
 }

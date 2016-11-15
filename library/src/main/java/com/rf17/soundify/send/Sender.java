@@ -101,9 +101,14 @@ public class Sender {
         generateAudioTrack();// Verifica se o audioTrack esta inicializado
 
         // Thread que vai tocar/executar as frequencias (para nao travar o app)
-        activity.runOnUiThread(() -> {
-            mAudioTrack.play();// Começa a tocar
-            mAudioTrack.write(ListUtils.convertListShortToArrayShort(list), 0, list.size());// Vai sobrescrevendo para tocar a lista de frequencias
+        // TODO NÃO UTILIZAR LAMBDA! NOT USE LAMBDA WHERE! ANDROID BUG
+        // TODO Error:Execution failed for task ':library:compileReleaseJavaWithJavac'. > Compilation failed; see the compiler error output for details.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAudioTrack.play();// Começa a tocar
+                mAudioTrack.write(ListUtils.convertListShortToArrayShort(list), 0, list.size());// Vai sobrescrevendo para tocar a lista de frequencias
+            }
         });
     }
 

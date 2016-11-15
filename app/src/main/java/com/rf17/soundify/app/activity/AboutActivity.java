@@ -25,6 +25,7 @@ public class AboutActivity extends AppCompatActivity {
 
     public void onClickDeveloper(View view) {
 
+
     }
 
     public void onClickEmail(View view) {

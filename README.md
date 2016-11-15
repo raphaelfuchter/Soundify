@@ -12,7 +12,7 @@ Feel free to fork or issue pull requests on github. Issues can be reported on th
 
 Soundify | 
 ---- | ----
-![Soundify](https://github.com/RF177/Soundify/blob/master/gem2.gif) | 
+![Soundify](https://github.com/RF177/Soundify/blob/Work/gem2.gif?raw=true) | 
 
 ## Table of Contents
 1. [Setup](#setup)

@@ -9,10 +9,7 @@ Support for Android 4.0.3 and up.
 
 Feel free to fork or issue pull requests on github. Issues can be reported on the github issue tracker.
 
-
-Soundify | 
----- | ----
-![Soundify](https://github.com/RF177/Soundify/blob/Work/gem2.gif?raw=true) | 
+![Soundify](https://github.com/RF177/Soundify/blob/Work/gem2.gif?raw=true) 
 
 ## Table of Contents
 1. [Setup](#setup)
